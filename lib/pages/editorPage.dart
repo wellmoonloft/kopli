@@ -4,17 +4,47 @@ import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 
-class EditorPage extends StatelessWidget {
+class EditorPage extends StatefulWidget {
   final TextEditingController controller;
   final bool isEdit;
   final Article activeArticle;
+  final double offset;
+  final scrollOffset;
 
-  const EditorPage({Key key, this.controller, this.isEdit, this.activeArticle})
+  const EditorPage(
+      {Key key,
+      this.controller,
+      this.isEdit,
+      this.activeArticle,
+      this.offset,
+      this.scrollOffset})
       : super(key: key);
+  @override
+  _EditorPageState createState() => _EditorPageState();
+}
+
+class _EditorPageState extends State<EditorPage> {
+  ScrollController _controller = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(() {
+      widget.scrollOffset(_controller.offset);
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return Column(
       children: <Widget>[
         Container(
@@ -32,14 +62,14 @@ class EditorPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10),
                 child: Text(
-                    activeArticle.fileName == null
+                    widget.activeArticle.fileName == null
                         ? "未保存"
-                        : activeArticle.fileName,
+                        : widget.activeArticle.fileName,
                     style: AppTheme.pagefont),
               ),
               Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  child: isEdit
+                  child: widget.isEdit
                       ? Text("已编辑", style: AppTheme.pagefont)
                       : Container()),
             ],
@@ -55,10 +85,14 @@ class EditorPage extends StatelessWidget {
                     color: ColorTheme.greydoublelighter, width: 0.5)),
           ),
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 0),
-          child: TextFormField(
-            controller: controller,
+          child: TextField(
+            autofocus: true,
+            controller: widget.controller,
+            scrollController: _controller,
             keyboardType: TextInputType.multiline,
-            maxLines: 100,
+            maxLines: 500,
+            maxLengthEnforcement:
+                MaxLengthEnforcement.truncateAfterCompositionEnds,
             minLines: 1,
             decoration: InputDecoration(
               border: InputBorder.none,

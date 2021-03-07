@@ -29,6 +29,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
   bool isList = false;
   Icon isListIcon = Icon(FontAwesomeIcons.listUl);
   String leftTitle = "文档";
+  String sortsCode = "default";
 
   @override
   Widget build(BuildContext context) {
@@ -103,77 +104,74 @@ class _ArticlesPageState extends State<ArticlesPage> {
                   padding: EdgeInsets.only(left: 10, right: 10),
                   height: height - 60,
                   child: (tempList != null && tempList.length > 0)
-                      ? ListView.separated(
+                      ? ListView.builder(
                           itemCount: tempList.length,
                           itemBuilder: (BuildContext context, int index) {
                             var article = tempList[index];
-                            return Container(
-                              color: widget.activeArticle.id == article.id
-                                  ? ColorTheme.greytriplelighter
-                                  : ColorTheme.leftBackColor,
-                              padding: EdgeInsets.all(10),
-                              child: InkWell(
-                                  onTap: () {
-                                    widget.loadArticle(article);
-                                    setState(() {
-                                      print("click index=$index");
-                                    });
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        article.title,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        article.outline,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w300,
-                                            color: ColorTheme.greylighter),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        article.editDate,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300,
-                                            color: ColorTheme.mainColor),
-                                      ),
-                                      // SizedBox(
-                                      //   height: 10,
-                                      // )
-                                    ],
-                                  )),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Divider(
-                              color: ColorTheme.greydoublelighter,
-                              height: 2,
-                            );
-                          },
-                        )
+                            return sortsCode == article.sort
+                                ? Container(
+                                    color: widget.activeArticle.id == article.id
+                                        ? ColorTheme.greytriplelighter
+                                        : ColorTheme.leftBackColor,
+                                    padding: EdgeInsets.all(10),
+                                    child: InkWell(
+                                        onTap: () {
+                                          widget.loadArticle(article);
+                                          setState(() {
+                                            print("click index=$index");
+                                          });
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              article.title,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              article.outline,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w300,
+                                                  color:
+                                                      ColorTheme.greylighter),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              article.editDate,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w300,
+                                                  color: ColorTheme.mainColor),
+                                            ),
+                                            // SizedBox(
+                                            //   height: 10,
+                                            // )
+                                          ],
+                                        )),
+                                  )
+                                : Container();
+                          })
                       : Text(""),
                 );
               }),
@@ -188,8 +186,11 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                     color: ColorTheme.greydoublelighter,
                                     width: 0.5)),
                           ),
-                          child:
-                              ArticlesBottom(newArticle: () => _newArticle())))
+                          child: ArticlesBottom(
+                            newArticle: () => _newArticle(),
+                            changeSorts: (_sortsCode) =>
+                                _changeSorts(_sortsCode),
+                          )))
                   : Container()
             ],
           ),
@@ -198,5 +199,11 @@ class _ArticlesPageState extends State<ArticlesPage> {
 
   _newArticle() {
     widget.newArticle();
+  }
+
+  _changeSorts(String _sortsCode) {
+    setState(() {
+      sortsCode = _sortsCode;
+    });
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:kopli/dialogs/saveArticles.dart';
 import 'package:kopli/model/dataModels.dart';
-import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/utils/dbHelper.dart';
 import 'package:kopli/utils/providerData.dart';
@@ -22,21 +22,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String stringData = "";
   TextEditingController _controller = new TextEditingController();
-  TextEditingController _filecontroller = new TextEditingController();
   String dir = "";
   bool isEdit = false;
   Article activeArticle = Article();
   String title = "Kopli";
+  String itemValue = "default";
+  double offset = 0.0;
 
   @override
   void initState() {
     super.initState();
 
     _getDocumentPath();
+    var providerData = Provider.of<ProviderData>(context, listen: false);
+    providerData.getArticle();
+    providerData.getSorts();
     _controller.addListener(() {
       if (stringData != _controller.text) {
         setState(() {
-          title = _filecontroller.text;
           stringData = _controller.text;
           isEdit = true;
         });
@@ -62,176 +65,82 @@ class _MyHomePageState extends State<MyHomePage> {
         activeArticle = Article();
         dir = directory.path;
         title = "未命名";
-        _filecontroller.text = "未命名.md";
         _controller.text = "";
         stringData = "";
         isEdit = false;
       });
     });
-
-    var providerData = Provider.of<ProviderData>(context, listen: false);
-    providerData.getArticle();
   }
 
-  _saveArticle() async {
+  _saveArticle(Article _article) async {
+    File file = new File(p.join(dir, _article.fileName));
     DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm:ss");
-    if (activeArticle.id == null) {
-      activeArticle.createDate = formatter.format(DateTime.now());
-      activeArticle.editDate = formatter.format(DateTime.now());
-      activeArticle.fileName = _filecontroller.text;
-      activeArticle.filePath = dir;
-      activeArticle.outline = stringData.substring(0, stringData.length);
-      activeArticle.sort = "";
-      activeArticle.title = _filecontroller.text;
+    await file.exists().then((value) async {
+      if (value && activeArticle.id == null) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text("存在同名的文章，请更改文章名字"),
+                title: Center(
+                    child: Text(
+                  "无法保存",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold),
+                )),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('我知道了')),
+                ],
+              );
+            });
+      } else {
+        if (activeArticle.id == null) {
+          activeArticle.createDate = formatter.format(DateTime.now());
+          activeArticle.editDate = formatter.format(DateTime.now());
+          activeArticle.fileName = _article.fileName;
+          activeArticle.filePath = dir;
+          activeArticle.outline = stringData.substring(0, stringData.length);
+          activeArticle.sort = _article.sort;
+          activeArticle.title = _article.fileName;
 
-      await DBHelper().updateArticle(activeArticle).then((value) {
-        activeArticle.id = value;
-        File file = new File(p.join(dir, activeArticle.fileName));
-        file.writeAsString(stringData).whenComplete(() =>
-            {print("保存成功" + p.join(dir, activeArticle.fileName).toString())});
-      });
+          await DBHelper().updateArticle(activeArticle).then((value) {
+            activeArticle.id = value;
+            File file = new File(p.join(dir, activeArticle.fileName));
+            file.writeAsString(stringData).whenComplete(() => {
+                  print("保存成功" + p.join(dir, activeArticle.fileName).toString())
+                });
+          });
 
-      var providerData = Provider.of<ProviderData>(context, listen: false);
-      providerData.getArticle();
-    } else {
-      activeArticle.editDate = formatter.format(DateTime.now());
-      activeArticle.outline = stringData.substring(0, stringData.length);
+          var providerData = Provider.of<ProviderData>(context, listen: false);
+          providerData.getArticle();
+        } else {
+          activeArticle.editDate = formatter.format(DateTime.now());
+          activeArticle.outline = stringData.substring(0, stringData.length);
 
-      DBHelper().updateArticle(activeArticle).then((value) {
-        File file = new File(p.join(dir, activeArticle.fileName));
-        file.writeAsString(stringData).whenComplete(() =>
-            {print("保存成功" + p.join(dir, activeArticle.fileName).toString())});
-      });
-    }
-    setState(() {
-      isEdit = false;
+          DBHelper().updateArticle(activeArticle).then((value) {
+            File file = new File(p.join(dir, activeArticle.fileName));
+            file.writeAsString(stringData).whenComplete(() => {
+                  print("保存成功" + p.join(dir, activeArticle.fileName).toString())
+                });
+          });
+        }
+
+        setState(() {
+          isEdit = false;
+        });
+      }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-
-    showSavingDialog() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-              child: Container(
-                  width: 500,
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                          width: 200,
-                          child: TextField(
-                            autofocus: true,
-                            controller: _filecontroller,
-                            decoration: InputDecoration(
-                              labelText: '保存为',
-                              filled: true,
-                              fillColor: ColorTheme.leftBackColor,
-                              labelStyle: TextStyle(
-                                color: ColorTheme.mainColor,
-                                fontSize: 12,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          )),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  ColorTheme.greydoublelighter),
-                            ),
-                            onPressed: () {},
-                            child: Text("新建标签", style: AppTheme.pagefont),
-                          ),
-                          Row(
-                            children: [
-                              TextButton(
-                                child: Text('取消', style: AppTheme.pagefont),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          ColorTheme.greydoublelighter),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              TextButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          ColorTheme.appleBlue),
-                                ),
-                                onPressed: () {
-                                  _saveArticle();
-                                  Navigator.of(context).pop();
-                                },
-                                child:
-                                    Text("保存", style: AppTheme.pagefontwhite),
-                              )
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  )));
-        },
-      );
-    }
-
-    return Scaffold(
-        appBar: (width / height > 1)
-            ? null
-            : AppBar(
-                title: Text(title),
-              ),
-        body: RawKeyboardListener(
-            focusNode: FocusNode(),
-            onKey: (RawKeyEvent event) async {
-              if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) ||
-                  event.isKeyPressed(LogicalKeyboardKey.metaRight)) {
-                if (event.isKeyPressed(LogicalKeyboardKey.keyS)) {
-                  if (activeArticle.id != null) {
-                    _saveArticle();
-                  } else {
-                    showSavingDialog();
-                  }
-                }
-              }
-            },
-            autofocus: true,
-            child: Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                (width / height > 1)
-                    ? ArticlesPage(
-                        isEdit: isEdit,
-                        activeArticle: activeArticle,
-                        newArticle: () => _newArticle(),
-                        loadArticle: (_article) => _loadArticle(_article))
-                    : Container(),
-                EditorPage(
-                    activeArticle: activeArticle,
-                    controller: _controller,
-                    isEdit: isEdit),
-                PreviewPage(data: stringData)
-              ],
-            )));
   }
 
   _loadArticle(Article _article) async {
     if (isEdit) {
-      showDeleteConfirmDialog1("load", _article);
+      showNewAndLoadDialog("load", _article);
     } else {
       File file = new File(p.join(_article.filePath, _article.fileName));
       await file.readAsString().then((value) {
@@ -241,7 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
           title = _article.fileName;
           _controller.text = value;
           stringData = value;
-          _filecontroller.text = _article.fileName;
           isEdit = false;
         });
       });
@@ -250,15 +158,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _newArticle() {
     if (isEdit) {
-      showDeleteConfirmDialog1("new", null);
+      showNewAndLoadDialog("new", null);
     } else {
-      print("新建文章");
       _getDocumentPath();
     }
   }
 
-  // 弹出对话框
-  Future<bool> showDeleteConfirmDialog1(String isNewLoad, Article _article) {
+  Future<bool> showNewAndLoadDialog(String isNewLoad, Article _article) {
     return showDialog<bool>(
       context: context,
       builder: (context) {
@@ -296,7 +202,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       title = _article.fileName;
                       _controller.text = value;
                       stringData = value;
-                      _filecontroller.text = _article.fileName;
                       isEdit = false;
                     });
                   });
@@ -315,5 +220,67 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+        appBar: (width / height > 1)
+            ? null
+            : AppBar(
+                title: Text(title),
+              ),
+        body: RawKeyboardListener(
+            focusNode: FocusNode(),
+            onKey: (RawKeyEvent event) async {
+              if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) ||
+                  event.isKeyPressed(LogicalKeyboardKey.metaRight)) {
+                if (event.isKeyPressed(LogicalKeyboardKey.keyS)) {
+                  if (activeArticle.id != null) {
+                    _saveArticle(activeArticle);
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SaveArticles(
+                              saveArticle: (_article) =>
+                                  _saveArticle(_article));
+                        });
+                  }
+                }
+              }
+            },
+            autofocus: true,
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                (width / height > 1)
+                    ? ArticlesPage(
+                        isEdit: isEdit,
+                        activeArticle: activeArticle,
+                        newArticle: () => _newArticle(),
+                        loadArticle: (_article) => _loadArticle(_article))
+                    : Container(),
+                EditorPage(
+                  activeArticle: activeArticle,
+                  controller: _controller,
+                  isEdit: isEdit,
+                  scrollOffset: (_offset) => _scrollOffset(_offset),
+                ),
+                PreviewPage(
+                  data: stringData,
+                  offset: offset,
+                )
+              ],
+            )));
+  }
+
+  _scrollOffset(double _offset) {
+    setState(() {
+      offset = _offset;
+    });
   }
 }

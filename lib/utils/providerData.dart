@@ -8,6 +8,7 @@ class ProviderData extends ChangeNotifier {
 
   List<String> documentList = [];
   List<Article> articleList;
+  List<Sorts> sortsList;
 
   setDocumentList(List<String> _documentList) {
     documentList = _documentList;
@@ -19,42 +20,8 @@ class ProviderData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<int> setArticle(Article article) async {
-    int id = await DBHelper().updateArticle(article);
-    return id;
+  Future getSorts() async {
+    sortsList = await DBHelper().getSorts();
+    notifyListeners();
   }
-
-  // Future setPerson(Person _person) async {
-  //   await DBHelper().updatePerson(_person);
-  //   notifyListeners();
-  // }
-
-  // setCurrencyData(eurData, currencyTilte) {
-  //   currencyData.forEach((element) {
-  //     if (eurData != null) {
-  //       if (element.short == 'EUR') {
-  //         element.rate = 1;
-  //       } else {
-  //         element.rate = eurData[element.short];
-  //       }
-  //     } else {
-  //       element.rate = 1;
-  //     }
-
-  //     if (element.short == currencyTilte) {
-  //       currency = element;
-  //     }
-  //   });
-  //   notifyListeners();
-  // }
-
-  // setCurrency(String short) {
-  //   currencyData.forEach((element) {
-  //     if (element.short == short) {
-  //       currency = element;
-  //     }
-  //   });
-  //   notifyListeners();
-  // }
-
 }
