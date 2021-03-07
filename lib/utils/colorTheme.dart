@@ -17,6 +17,7 @@ class ColorTheme {
   static const Color greyquadradarker = Color(0xFF191919);
   static const Color greylighter = Color(0xFFa0a0a0);
   static const Color greydoublelighter = Color(0xFFd8d8d8);
+  static const Color greytriplelighter = Color(0xFFececec);
 
   static const Color pale = Color(0xFF5E61DE);
   static const Color palelighter = Color(0xFFa0a1eb);
@@ -51,6 +52,10 @@ class ColorTheme {
   static const Color mainGreen = Color(0xFF36F740);
   static const Color mainRed = Color(0xFFFF4646);
   static const Color mainPink = Color(0xFFEC5690);
+
+  static const Color leftBackColor = Color(0xFFFAFAFA);
+  static const Color mainColor = Color(0xFF333333);
+  static const Color appleBlue = Color(0xFF1a88ff);
 }
 
 class HexColor extends Color {
@@ -64,3 +69,5 @@ class HexColor extends Color {
     return int.parse(hexColor, radix: 16);
   }
 }
+
+//250 * 3 255*3 51*3
