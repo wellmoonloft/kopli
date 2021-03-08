@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:kopli/dialogs/myDialog.dart';
-import 'package:kopli/dialogs/saveArticles.dart';
+import 'package:kopli/commonWidgets/myDialog.dart';
+import 'package:kopli/commonWidgets/saveArticles.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/utils/dbHelper.dart';
 import 'package:kopli/utils/providerData.dart';

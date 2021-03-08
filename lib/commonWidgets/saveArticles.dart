@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kopli/dialogs/newSorts.dart';
+import 'package:intl/intl.dart';
+import 'package:kopli/commonWidgets/newSorts.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/model/dataModels.dart';
-import 'package:kopli/utils/myBottom.dart';
+import 'package:kopli/commonWidgets/myBottom.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +20,7 @@ class SaveArticles extends StatefulWidget {
 class _SaveArticlesState extends State<SaveArticles> {
   TextEditingController _filecontroller = new TextEditingController();
   TextEditingController _outlinecontroller = new TextEditingController();
+  TextEditingController _dateTimecontroller = new TextEditingController();
   String itemValue = "default";
 
   @override
@@ -30,6 +30,8 @@ class _SaveArticlesState extends State<SaveArticles> {
     setState(() {
       _filecontroller.text = "未命名.md";
       _outlinecontroller.text = "";
+      _dateTimecontroller.text =
+          DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     });
   }
 
@@ -46,9 +48,13 @@ class _SaveArticlesState extends State<SaveArticles> {
         child: Container(
             width: 400,
             height: 300,
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
+                Container(
+                    width: 400,
+                    child: Text("保存文章",
+                        style: AppTheme.titleFont, textAlign: TextAlign.start)),
                 TextField(
                   autofocus: true,
                   controller: _filecontroller,
@@ -68,6 +74,18 @@ class _SaveArticlesState extends State<SaveArticles> {
                   inputFormatters: [LengthLimitingTextInputFormatter(50)],
                   decoration: InputDecoration(
                     labelText: '摘要（为空则自动选取内容前50字）',
+                    fillColor: ColorTheme.leftBackColor,
+                    labelStyle: AppTheme.dateFont,
+                  ),
+                ),
+                TextField(
+                  autofocus: true,
+                  controller: _dateTimecontroller,
+                  maxLines: 2,
+                  style: AppTheme.pagefont,
+                  onTap: () async {},
+                  decoration: InputDecoration(
+                    labelText: '文章发布时间',
                     fillColor: ColorTheme.leftBackColor,
                     labelStyle: AppTheme.dateFont,
                   ),

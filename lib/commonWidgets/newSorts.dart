@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kopli/dialogs/myDialog.dart';
+import 'package:kopli/commonWidgets/myDialog.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/utils/dbHelper.dart';
-import 'package:kopli/utils/myBottom.dart';
+import 'package:kopli/commonWidgets/myBottom.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 

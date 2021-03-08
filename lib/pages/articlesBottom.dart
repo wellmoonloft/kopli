@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kopli/dialogs/newSorts.dart';
+import 'package:kopli/commonWidgets/newSorts.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/utils/providerData.dart';

@@ -169,7 +169,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                   )
                                 : Container();
                           })
-                      : Text(""),
+                      : Text(isList ? "文档视图" : "大纲视图"),
                 );
               }),
               !isList

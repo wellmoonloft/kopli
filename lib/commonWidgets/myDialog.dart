@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/myBottom.dart';
+import 'package:kopli/commonWidgets/myBottom.dart';
 
 class MyDialog extends StatelessWidget {
   final onPress;
