@@ -19,6 +19,17 @@ class ArticlesBottom extends StatefulWidget {
 
 class _ArticlesBottomState extends State<ArticlesBottom> {
   String itemValue = "default";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -49,13 +60,13 @@ class _ArticlesBottomState extends State<ArticlesBottom> {
                   sortslist.forEach((element) {
                     sorts.add(DropdownMenuItem(
                       value: element.sortsCode,
-                      child: Text(element.sortsName),
+                      child: Text(element.sortsName, style: AppTheme.titleFont),
                     ));
                   });
                 } else {
                   sorts.add(DropdownMenuItem(
                     value: "default",
-                    child: Text("默认"),
+                    child: Text("默认", style: AppTheme.titleFont),
                   ));
                 }
 
@@ -66,7 +77,7 @@ class _ArticlesBottomState extends State<ArticlesBottom> {
                     items: sorts,
                     value: itemValue,
                     iconSize: 12,
-                    style: AppTheme.pagefont,
+                    style: AppTheme.titleFont,
                     underline: Container(height: 0),
                     elevation: 1,
                     onChanged: (value) {

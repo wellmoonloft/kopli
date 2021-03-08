@@ -16,7 +16,7 @@ class ColorTheme {
   static const Color greytripledarker = Color(0xFF2c2c2c);
   static const Color greyquadradarker = Color(0xFF191919);
   static const Color greylighter = Color(0xFFa0a0a0);
-  static const Color greydoublelighter = Color(0xFFd8d8d8);
+  static const Color greydoublelighter = Color(0xFFE5E5E5);
   static const Color greytriplelighter = Color(0xFFececec);
 
   static const Color pale = Color(0xFF5E61DE);

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kopli/dialogs/myDialog.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/utils/dbHelper.dart';
+import 'package:kopli/utils/myBottom.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +18,19 @@ class _NewSortsState extends State<NewSorts> {
   TextEditingController _nameController = new TextEditingController();
   TextEditingController _codeController = new TextEditingController();
   bool isSave = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _codeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -38,32 +53,25 @@ class _NewSortsState extends State<NewSorts> {
                             bottom: BorderSide(
                                 color: ColorTheme.greydoublelighter,
                                 width: 0.5))),
-                    child: Text("添加分类", textAlign: TextAlign.start)),
+                    child: Text("添加分类",
+                        style: AppTheme.titleFont, textAlign: TextAlign.start)),
                 TextField(
                   autofocus: true,
                   controller: _nameController,
+                  style: AppTheme.titleFont,
                   decoration: InputDecoration(
-                    labelText: "标签名称",
-                    fillColor: ColorTheme.leftBackColor,
-                    labelStyle: TextStyle(
-                      color: ColorTheme.mainColor,
-                      fontSize: 12,
-                    ),
-                    //border: InputBorder.none,
-                  ),
+                      labelText: "标签名称",
+                      fillColor: ColorTheme.leftBackColor,
+                      labelStyle: AppTheme.dateFont),
                 ),
                 TextField(
                   autofocus: true,
                   controller: _codeController,
+                  style: AppTheme.titleFont,
                   decoration: InputDecoration(
-                    labelText: "标签代码（最好为英文）",
-                    fillColor: ColorTheme.leftBackColor,
-                    labelStyle: TextStyle(
-                      color: ColorTheme.mainColor,
-                      fontSize: 12,
-                    ),
-                    //border: InputBorder.none,
-                  ),
+                      labelText: "标签代码（最好为英文）",
+                      fillColor: ColorTheme.leftBackColor,
+                      labelStyle: AppTheme.dateFont),
                 ),
                 SizedBox(
                   height: 20,
@@ -71,25 +79,20 @@ class _NewSortsState extends State<NewSorts> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(
-                      child: Text('退出', style: AppTheme.pagefont),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            ColorTheme.greydoublelighter),
-                      ),
-                      onPressed: () {
+                    MyBottom(
+                      title: "退出",
+                      type: "cancel",
+                      onPress: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            ColorTheme.appleBlue),
-                      ),
-                      onPressed: () async {
+                    MyBottom(
+                      title: isSave ? "保存" : "更新",
+                      type: "confirm",
+                      onPress: () async {
                         if (_nameController.text == "") {
                           print("name空");
                         } else if (_codeController.text == "") {
@@ -114,8 +117,6 @@ class _NewSortsState extends State<NewSorts> {
                           });
                         }
                       },
-                      child: Text(isSave ? "保存" : "更新",
-                          style: AppTheme.pagefontwhite),
                     )
                   ],
                 )
@@ -141,12 +142,13 @@ class _NewSortsState extends State<NewSorts> {
                             bottom: BorderSide(
                                 color: ColorTheme.greydoublelighter,
                                 width: 0.5))),
-                    child: Text("分类列表", textAlign: TextAlign.start)),
+                    child: Text("分类列表",
+                        style: AppTheme.titleFont, textAlign: TextAlign.start)),
                 Consumer<ProviderData>(builder: (context, providerdata, child) {
                   List<Sorts> sortsList = providerdata.sortsList;
                   return Container(
                       padding: EdgeInsets.all(10),
-                      //height: 200,
+                      height: 420,
                       width: 280,
                       child: ListView.separated(
                         shrinkWrap: true,
@@ -160,8 +162,10 @@ class _NewSortsState extends State<NewSorts> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(sort.sortsName),
-                                  Text(sort.sortsCode),
+                                  Text(sort.sortsName,
+                                      style: AppTheme.titleFont),
+                                  Text(sort.sortsCode,
+                                      style: AppTheme.titleFont),
                                   Row(
                                     children: [
                                       TextButton(
@@ -175,59 +179,38 @@ class _NewSortsState extends State<NewSorts> {
                                               isSave = false;
                                             });
                                           },
-                                          child: Text("编辑")),
+                                          child: Text("编辑",
+                                              style:
+                                                  AppTheme.borderbottomfont)),
                                       TextButton(
                                           onPressed: () async {
                                             showDialog(
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return AlertDialog(
-                                                    content: Text("是否确认删除分类"),
-                                                    title: Center(
-                                                        child: Text(
-                                                      "删除分类",
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            //Navigator.of(context).pop();
-                                                          },
-                                                          child: Text('取消')),
-                                                      TextButton(
-                                                          onPressed: () async {
-                                                            await DBHelper()
-                                                                .deleteSorts(
-                                                                    sort)
-                                                                .then((value) {
-                                                              var providerData =
-                                                                  Provider.of<
-                                                                          ProviderData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false);
+                                                  return MyDialog(
+                                                    title: "删除分类",
+                                                    content: "是否确认删除分类",
+                                                    onPress: () async {
+                                                      await DBHelper()
+                                                          .deleteSorts(sort)
+                                                          .then((value) {
+                                                        var providerData =
+                                                            Provider.of<
+                                                                    ProviderData>(
+                                                                context,
+                                                                listen: false);
 
-                                                              providerData
-                                                                  .getSorts();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            });
-                                                          },
-                                                          child: Text('确定')),
-                                                    ],
+                                                        providerData.getSorts();
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      });
+                                                    },
                                                   );
                                                 });
                                           },
-                                          child: Text("删除"))
+                                          child: Text("删除",
+                                              style: AppTheme.borderbottomfont))
                                     ],
                                   )
                                 ],

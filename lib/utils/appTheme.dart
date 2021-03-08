@@ -14,13 +14,49 @@ class AppTheme {
     color: ColorTheme.mainBlack,
   );
 
+  static const titleFont = TextStyle(
+    //fontWeight: FontWeight.w300,
+    fontSize: 13,
+    color: ColorTheme.mainColor,
+  );
+
+  static const subTitleFont = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 13,
+    color: ColorTheme.greydoubledarker,
+  );
+
+  static const contentFont = TextStyle(
+    fontWeight: FontWeight.w200,
+    fontSize: 13,
+    color: ColorTheme.mainColor,
+  );
+
+  static const dateFont = TextStyle(
+    fontWeight: FontWeight.w300,
+    fontSize: 12,
+    color: ColorTheme.greylighter,
+  );
+
   static const pagefont = TextStyle(
     fontWeight: FontWeight.w300,
     fontSize: 12,
     color: ColorTheme.mainColor,
   );
 
-  static const pagefontwhite = TextStyle(
+  static const bottomfont = TextStyle(
+    fontWeight: FontWeight.w300,
+    fontSize: 12,
+    color: ColorTheme.mainColor,
+  );
+
+  static const borderbottomfont = TextStyle(
+    fontWeight: FontWeight.w300,
+    fontSize: 12,
+    color: ColorTheme.appleBlue,
+  );
+
+  static const bottomfontwhite = TextStyle(
     fontWeight: FontWeight.w300,
     fontSize: 12,
     color: ColorTheme.white,

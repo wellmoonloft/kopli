@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:kopli/dialogs/myDialog.dart';
 import 'package:kopli/dialogs/saveArticles.dart';
 import 'package:kopli/model/dataModels.dart';
-import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/utils/dbHelper.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:path/path.dart' as p;
@@ -80,23 +80,13 @@ class _MyHomePageState extends State<MyHomePage> {
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AlertDialog(
-                content: Text("存在同名的文章，请更改文章名字"),
-                title: Center(
-                    child: Text(
-                  "无法保存",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold),
-                )),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('我知道了')),
-                ],
+              return MyDialog(
+                title: "无法保存",
+                content: "存在同名的文章，请更改文章名字",
+                isAlert: true,
+                onPress: () {
+                  Navigator.of(context).pop();
+                },
               );
             });
       } else {
@@ -105,9 +95,18 @@ class _MyHomePageState extends State<MyHomePage> {
           activeArticle.editDate = formatter.format(DateTime.now());
           activeArticle.fileName = _article.fileName;
           activeArticle.filePath = dir;
-          activeArticle.outline = stringData.substring(0, stringData.length);
           activeArticle.sort = _article.sort;
           activeArticle.title = _article.fileName;
+          if (_article.outline == "") {
+            if (stringData.length > 50) {
+              activeArticle.outline = stringData.substring(0, 50);
+            } else {
+              activeArticle.outline =
+                  stringData.substring(0, stringData.length);
+            }
+          } else {
+            activeArticle.outline = _article.outline;
+          }
 
           await DBHelper().updateArticle(activeArticle).then((value) {
             activeArticle.id = value;
@@ -121,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           providerData.getArticle();
         } else {
           activeArticle.editDate = formatter.format(DateTime.now());
-          activeArticle.outline = stringData.substring(0, stringData.length);
+          //activeArticle.outline = stringData.substring(0, stringData.length);
 
           DBHelper().updateArticle(activeArticle).then((value) {
             File file = new File(p.join(dir, activeArticle.fileName));
@@ -140,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _loadArticle(Article _article) async {
     if (isEdit) {
-      showNewAndLoadDialog("load", _article);
+      _showNewAndLoadDialog("load", _article);
     } else {
       File file = new File(p.join(_article.filePath, _article.fileName));
       await file.readAsString().then((value) {
@@ -158,65 +157,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _newArticle() {
     if (isEdit) {
-      showNewAndLoadDialog("new", null);
+      _showNewAndLoadDialog("new", null);
     } else {
       _getDocumentPath();
     }
   }
 
-  Future<bool> showNewAndLoadDialog(String isNewLoad, Article _article) {
-    return showDialog<bool>(
+  _showNewAndLoadDialog(String isNewLoad, Article _article) {
+    return showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          content: Text("当前有尚未保存的内容，是否确定放弃?",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                color: ColorTheme.mainColor,
-              )),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("取消",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: ColorTheme.mainColor,
-                  )),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (isNewLoad == "new") {
-                  _getDocumentPath();
-                }
-                if (isNewLoad == "load") {
-                  File file =
-                      new File(p.join(_article.filePath, _article.fileName));
-                  await file.readAsString().then((value) {
-                    setState(() {
-                      activeArticle = _article;
-                      dir = _article.filePath;
-                      title = _article.fileName;
-                      _controller.text = value;
-                      stringData = value;
-                      isEdit = false;
-                    });
-                  });
-                }
-
-                Navigator.of(context).pop();
-              },
-              child: Text("确定",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: ColorTheme.darkred,
-                  )),
-            ),
-          ],
+        return MyDialog(
+          title: "请注意",
+          content: "当前有尚未保存的内容，是否确定放弃？",
+          onPress: () async {
+            if (isNewLoad == "new") {
+              _getDocumentPath();
+            }
+            if (isNewLoad == "load") {
+              File file =
+                  new File(p.join(_article.filePath, _article.fileName));
+              await file.readAsString().then((value) {
+                setState(() {
+                  activeArticle = _article;
+                  dir = _article.filePath;
+                  title = _article.fileName;
+                  _controller.text = value;
+                  stringData = value;
+                  isEdit = false;
+                });
+              });
+            }
+            Navigator.of(context).pop();
+          },
         );
       },
     );
@@ -255,7 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             autofocus: true,
             child: Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 (width / height > 1)
                     ? ArticlesPage(

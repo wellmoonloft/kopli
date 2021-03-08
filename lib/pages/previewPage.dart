@@ -52,7 +52,7 @@ class _PreviewPageState extends State<PreviewPage> {
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10),
                 child: Text("字数：" + widget.data.length.toString(),
-                    style: AppTheme.pagefont),
+                    style: AppTheme.dateFont),
               ),
             ],
           ),

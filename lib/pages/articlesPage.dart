@@ -30,6 +30,17 @@ class _ArticlesPageState extends State<ArticlesPage> {
   Icon isListIcon = Icon(FontAwesomeIcons.listUl);
   String leftTitle = "文档";
   String sortsCode = "default";
+  double articlesFrameHeight = 60;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +86,20 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                     isListIcon = Icon(FontAwesomeIcons.listUl);
                                     isList = false;
                                     leftTitle = "文档";
+                                    articlesFrameHeight = 60;
                                   });
                                 } else {
                                   setState(() {
                                     isListIcon = Icon(FontAwesomeIcons.stream);
                                     isList = true;
                                     leftTitle = "大纲";
+                                    articlesFrameHeight = 30;
                                   });
                                 }
                               },
                             ),
                           )),
-                      Text(leftTitle, style: AppTheme.pagefont),
+                      Text(leftTitle, style: AppTheme.titleFont),
                       Opacity(
                         opacity: isShow,
                         child: IconButton(
@@ -102,7 +115,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                 List<Article> tempList = providerdata.articleList;
                 return Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  height: height - 60,
+                  height: height - articlesFrameHeight,
                   child: (tempList != null && tempList.length > 0)
                       ? ListView.builder(
                           itemCount: tempList.length,
@@ -121,52 +134,36 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                             print("click index=$index");
                                           });
                                         },
+                                        onLongPress: () {
+                                          print("object");
+                                        },
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              article.title,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
+                                            Text(article.title,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTheme.subTitleFont),
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text(
-                                              article.outline,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w300,
-                                                  color:
-                                                      ColorTheme.greylighter),
-                                            ),
+                                            Text(article.outline,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTheme.contentFont),
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text(
-                                              article.editDate,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w300,
-                                                  color: ColorTheme.mainColor),
-                                            ),
-                                            // SizedBox(
-                                            //   height: 10,
-                                            // )
+                                            Text(article.editDate,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTheme.dateFont)
                                           ],
                                         )),
                                   )

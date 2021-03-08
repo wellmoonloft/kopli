@@ -65,12 +65,12 @@ class _EditorPageState extends State<EditorPage> {
                     widget.activeArticle.fileName == null
                         ? "未保存"
                         : widget.activeArticle.fileName,
-                    style: AppTheme.pagefont),
+                    style: AppTheme.dateFont),
               ),
               Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
                   child: widget.isEdit
-                      ? Text("已编辑", style: AppTheme.pagefont)
+                      ? Text("已编辑", style: AppTheme.dateFont)
                       : Container()),
             ],
           ),
@@ -91,8 +91,6 @@ class _EditorPageState extends State<EditorPage> {
             scrollController: _controller,
             keyboardType: TextInputType.multiline,
             maxLines: 500,
-            maxLengthEnforcement:
-                MaxLengthEnforcement.truncateAfterCompositionEnds,
             minLines: 1,
             decoration: InputDecoration(
               border: InputBorder.none,
