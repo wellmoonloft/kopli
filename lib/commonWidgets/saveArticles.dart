@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'package:kopli/commonWidgets/myDialog.dart';
+import 'package:kopli/utils/dbHelper.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kopli/commonWidgets/newSorts.dart';
 import 'package:kopli/utils/appTheme.dart';
+import 'package:kopli/utils/calendar_popup_view.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/commonWidgets/myBottom.dart';
@@ -11,8 +16,11 @@ import 'package:provider/provider.dart';
 
 class SaveArticles extends StatefulWidget {
   final saveArticle;
+  final String dir;
+  final String stringData;
 
-  const SaveArticles({Key key, this.saveArticle}) : super(key: key);
+  const SaveArticles({Key key, this.saveArticle, this.dir, this.stringData})
+      : super(key: key);
   @override
   _SaveArticlesState createState() => _SaveArticlesState();
 }
@@ -47,12 +55,19 @@ class _SaveArticlesState extends State<SaveArticles> {
     return Dialog(
         child: Container(
             width: 400,
-            height: 300,
+            height: 350,
             padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
                 Container(
                     width: 400,
+                    padding: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        color: ColorTheme.white,
+                        border: Border(
+                            bottom: BorderSide(
+                                color: ColorTheme.greydoublelighter,
+                                width: 0.5))),
                     child: Text("保存文章",
                         style: AppTheme.titleFont, textAlign: TextAlign.start)),
                 TextField(
@@ -83,12 +98,17 @@ class _SaveArticlesState extends State<SaveArticles> {
                   controller: _dateTimecontroller,
                   maxLines: 2,
                   style: AppTheme.pagefont,
-                  onTap: () async {},
+                  onTap: () async {
+                    showCalendar(context: context);
+                  },
                   decoration: InputDecoration(
                     labelText: '文章发布时间',
                     fillColor: ColorTheme.leftBackColor,
                     labelStyle: AppTheme.dateFont,
                   ),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,6 +159,9 @@ class _SaveArticlesState extends State<SaveArticles> {
                     )
                   ],
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -162,13 +185,70 @@ class _SaveArticlesState extends State<SaveArticles> {
                         MyBottom(
                           title: "保存",
                           type: "confirm",
-                          onPress: () {
-                            Article article = Article();
-                            article.fileName = _filecontroller.text;
-                            article.sort = itemValue;
-                            article.outline = _outlinecontroller.text;
-                            widget.saveArticle(article);
-                            Navigator.of(context).pop();
+                          onPress: () async {
+                            File file = new File(
+                                p.join(widget.dir, _filecontroller.text));
+                            await file.exists().then((value) async {
+                              if (value) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return MyDialog(
+                                        title: "无法保存",
+                                        content: "存在同名的文章，请更改文章名字",
+                                        isAlert: true,
+                                        onPress: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      );
+                                    });
+                              } else {
+                                Article article = Article();
+                                article.fileName = _filecontroller.text;
+                                article.title = _filecontroller.text;
+                                article.sort = itemValue;
+                                article.filePath = widget.dir;
+                                article.createDate = _dateTimecontroller.text;
+                                article.editDate = _dateTimecontroller.text;
+                                if (_outlinecontroller.text == "") {
+                                  if (widget.stringData.length > 50) {
+                                    article.outline =
+                                        widget.stringData.substring(0, 50);
+                                  } else {
+                                    article.outline = widget.stringData
+                                        .substring(0, widget.stringData.length);
+                                  }
+                                } else {
+                                  article.outline = _outlinecontroller.text;
+                                }
+
+                                await DBHelper()
+                                    .updateArticle(article)
+                                    .then((value) {
+                                  article.id = value;
+                                  File file = new File(
+                                      p.join(widget.dir, article.fileName));
+                                  file
+                                      .writeAsString(widget.stringData)
+                                      .whenComplete(() => {
+                                            widget.saveArticle(article),
+                                            print("保存成功" +
+                                                p
+                                                    .join(widget.dir,
+                                                        article.fileName)
+                                                    .toString())
+                                          });
+                                });
+
+                                var providerData = Provider.of<ProviderData>(
+                                    context,
+                                    listen: false);
+                                providerData.getArticle();
+                                Navigator.of(context).pop();
+                              }
+                            });
+
+                            //widget.saveArticle(article);
                           },
                         )
                       ],
@@ -177,5 +257,27 @@ class _SaveArticlesState extends State<SaveArticles> {
                 )
               ],
             )));
+  }
+
+  void showCalendar({BuildContext context}) {
+    showDialog<dynamic>(
+      context: context,
+      builder: (BuildContext context) => CalendarPopupView(
+        barrierDismissible: true,
+        isSingleDate: true,
+        //minimumDate: DateTime.now(),
+        //maximumDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 10),
+        //initialEndDate: endDate,
+        initialStartDate: DateTime.now(),
+        onApplyClick:
+            (DateTime startData, DateTime endData, DateTime month, int mark) {
+          setState(() {
+            _dateTimecontroller.text =
+                DateFormat("yyyy-MM-dd HH:mm:ss").format(startData);
+          });
+        },
+        onCancelClick: () {},
+      ),
+    );
   }
 }

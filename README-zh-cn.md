@@ -27,6 +27,20 @@
 
 3. 在项目目录中执行 `flutter packages get`
 
+4. 如果想要在macOS当中使用的话，需要在macos/Runner/*.entitlements当中添加授权，否则沙盒模式无法访问网络图片
+
+```
+	<key>com.apple.security.network.client</key>
+	<true/>
+```
+
+5. 为了隐藏macOS APP上的标题栏，使用Xcode打开工程，在Runner>Runner>Resources>MainMenu.xib当中点击APP_NAME
+- Hide title = TRUE
+- Show Title bar = TRUE
+- Transparent Title Bar = TRUE
+- Full-Size Content View = TRUE
+
+
 
 ## 参考
 - [Typora](https://typora.io/) 参考了Typora的设计风格。
@@ -45,7 +59,6 @@
 ## 进度
 
 目前还未完成，上传到git只是因为我办公室和家里面有两台电脑，嗯。
-
 
 
 ## Todo List 
@@ -68,9 +81,6 @@
 
 ### Mark
 
-想要对于macOS上链接外部网络，需要在
-Runner/*.entitlements里面添加授权
-	<key>com.apple.security.network.client</key>
-	<true/>
+
 
 使用 file_chooser插件需要添加 com.apple.security.files.user-selected.read-only或 com.apple.security.files.user-selected.read-write权利。

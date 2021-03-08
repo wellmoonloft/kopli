@@ -30,7 +30,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
   Icon isListIcon = Icon(FontAwesomeIcons.listUl);
   String leftTitle = "文档";
   String sortsCode = "default";
-  double articlesFrameHeight = 60;
+  double articlesFrameHeight = 85;
 
   @override
   void initState() {
@@ -62,6 +62,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
         onEnter: _mouseEnter,
         onExit: _mouseExit,
         child: Container(
+          padding: EdgeInsets.only(top: 25),
           width: 270,
           color: ColorTheme.leftBackColor,
           child: Column(
@@ -86,14 +87,14 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                     isListIcon = Icon(FontAwesomeIcons.listUl);
                                     isList = false;
                                     leftTitle = "文档";
-                                    articlesFrameHeight = 60;
+                                    articlesFrameHeight = 85;
                                   });
                                 } else {
                                   setState(() {
                                     isListIcon = Icon(FontAwesomeIcons.stream);
                                     isList = true;
                                     leftTitle = "大纲";
-                                    articlesFrameHeight = 30;
+                                    articlesFrameHeight = 55;
                                   });
                                 }
                               },

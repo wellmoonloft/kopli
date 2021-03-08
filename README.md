@@ -25,6 +25,14 @@ The demand I want is this:
 
 3. Do `flutter packages get` in your project directory
 
+4. If you want to use it in macOS, you need to add authorization in macos/Runner/*.entitlements, otherwise the sandbox mode cannot access network pictures
+
+```
+	<key>com.apple.security.network.client</key>
+	<true/>
+```
+
+
 ## Reference
 
 - [Typora](https://typora.io/) Reference to Typora's design style.

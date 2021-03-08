@@ -73,67 +73,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _saveArticle(Article _article) async {
-    File file = new File(p.join(dir, _article.fileName));
+    setState(() {
+      activeArticle = _article;
+    });
+
     DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm:ss");
-    await file.exists().then((value) async {
-      if (value && activeArticle.id == null) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return MyDialog(
-                title: "无法保存",
-                content: "存在同名的文章，请更改文章名字",
-                isAlert: true,
-                onPress: () {
-                  Navigator.of(context).pop();
-                },
-              );
-            });
-      } else {
-        if (activeArticle.id == null) {
-          activeArticle.createDate = formatter.format(DateTime.now());
-          activeArticle.editDate = formatter.format(DateTime.now());
-          activeArticle.fileName = _article.fileName;
-          activeArticle.filePath = dir;
-          activeArticle.sort = _article.sort;
-          activeArticle.title = _article.fileName;
-          if (_article.outline == "") {
-            if (stringData.length > 50) {
-              activeArticle.outline = stringData.substring(0, 50);
-            } else {
-              activeArticle.outline =
-                  stringData.substring(0, stringData.length);
-            }
-          } else {
-            activeArticle.outline = _article.outline;
-          }
+    activeArticle.editDate = formatter.format(DateTime.now());
 
-          await DBHelper().updateArticle(activeArticle).then((value) {
-            activeArticle.id = value;
-            File file = new File(p.join(dir, activeArticle.fileName));
-            file.writeAsString(stringData).whenComplete(() => {
-                  print("保存成功" + p.join(dir, activeArticle.fileName).toString())
-                });
-          });
-
-          var providerData = Provider.of<ProviderData>(context, listen: false);
-          providerData.getArticle();
-        } else {
-          activeArticle.editDate = formatter.format(DateTime.now());
-          //activeArticle.outline = stringData.substring(0, stringData.length);
-
-          DBHelper().updateArticle(activeArticle).then((value) {
-            File file = new File(p.join(dir, activeArticle.fileName));
-            file.writeAsString(stringData).whenComplete(() => {
-                  print("保存成功" + p.join(dir, activeArticle.fileName).toString())
-                });
-          });
-        }
-
-        setState(() {
-          isEdit = false;
-        });
-      }
+    DBHelper().updateArticle(activeArticle).then((value) {
+      File file = new File(p.join(dir, activeArticle.fileName));
+      file.writeAsString(stringData).whenComplete(() =>
+          {print("保存成功" + p.join(dir, activeArticle.fileName).toString())});
+      setState(() {
+        isEdit = false;
+      });
     });
   }
 
@@ -219,6 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         context: context,
                         builder: (BuildContext context) {
                           return SaveArticles(
+                              dir: dir,
+                              stringData: stringData,
                               saveArticle: (_article) =>
                                   _saveArticle(_article));
                         });

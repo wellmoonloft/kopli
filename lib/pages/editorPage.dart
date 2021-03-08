@@ -57,20 +57,18 @@ class _EditorPageState extends State<EditorPage> {
                     color: ColorTheme.greydoublelighter, width: 0.5)),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
                 child: Text(
                     widget.activeArticle.fileName == null
-                        ? "未保存"
+                        ? "未命名"
                         : widget.activeArticle.fileName,
                     style: AppTheme.dateFont),
               ),
               Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
                   child: widget.isEdit
-                      ? Text("已编辑", style: AppTheme.dateFont)
+                      ? Text("-已编辑", style: AppTheme.dateFont)
                       : Container()),
             ],
           ),
@@ -84,15 +82,21 @@ class _EditorPageState extends State<EditorPage> {
                 left: BorderSide(
                     color: ColorTheme.greydoublelighter, width: 0.5)),
           ),
-          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 0),
+          padding: EdgeInsets.only(left: 10, right: 10),
           child: TextField(
             autofocus: true,
             controller: widget.controller,
             scrollController: _controller,
             keyboardType: TextInputType.multiline,
+            style: TextStyle(
+              fontSize: 14,
+              color: ColorTheme.mainColor,
+            ),
             maxLines: 500,
             minLines: 1,
             decoration: InputDecoration(
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 4),
               border: InputBorder.none,
             ),
           ),

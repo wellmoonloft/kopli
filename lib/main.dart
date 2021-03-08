@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => ProviderData(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Kopli',
           theme: ThemeData(
             primarySwatch: Colors.blue,

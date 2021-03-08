@@ -49,6 +49,7 @@ class _PreviewPageState extends State<PreviewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Container(),
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10),
                 child: Text("字数：" + widget.data.length.toString(),
@@ -59,7 +60,6 @@ class _PreviewPageState extends State<PreviewPage> {
         ),
         Container(
           width: (width / height > 1) ? (width - 270) / 2 : 0,
-          padding: EdgeInsets.only(bottom: 20, top: 8),
           decoration: BoxDecoration(
             color: ColorTheme.white,
             border: Border(
