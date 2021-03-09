@@ -70,46 +70,53 @@ class _SaveArticlesState extends State<SaveArticles> {
                                 width: 0.5))),
                     child: Text("保存文章",
                         style: AppTheme.titleFont, textAlign: TextAlign.start)),
-                TextField(
-                  autofocus: true,
-                  controller: _filecontroller,
-                  style: AppTheme.pagefont,
-                  inputFormatters: [LengthLimitingTextInputFormatter(28)],
-                  decoration: InputDecoration(
-                    labelText: '保存为',
-                    fillColor: ColorTheme.leftBackColor,
-                    labelStyle: AppTheme.dateFont,
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: TextField(
+                    autofocus: true,
+                    controller: _filecontroller,
+                    style: AppTheme.pagefont,
+                    inputFormatters: [LengthLimitingTextInputFormatter(28)],
+                    decoration: InputDecoration(
+                      labelText: '保存为',
+                      isDense: true,
+                      fillColor: ColorTheme.leftBackColor,
+                      labelStyle: AppTheme.dateFont,
+                    ),
                   ),
                 ),
-                TextField(
-                  autofocus: true,
-                  controller: _outlinecontroller,
-                  maxLines: 2,
-                  style: AppTheme.pagefont,
-                  inputFormatters: [LengthLimitingTextInputFormatter(50)],
-                  decoration: InputDecoration(
-                    labelText: '摘要（为空则自动选取内容前50字）',
-                    fillColor: ColorTheme.leftBackColor,
-                    labelStyle: AppTheme.dateFont,
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: TextField(
+                    autofocus: true,
+                    controller: _outlinecontroller,
+                    maxLines: 2,
+                    style: AppTheme.pagefont,
+                    inputFormatters: [LengthLimitingTextInputFormatter(50)],
+                    decoration: InputDecoration(
+                      labelText: '摘要（为空则自动选取内容前50字）',
+                      isDense: true,
+                      fillColor: ColorTheme.leftBackColor,
+                      labelStyle: AppTheme.dateFont,
+                    ),
                   ),
                 ),
-                TextField(
-                  autofocus: true,
-                  controller: _dateTimecontroller,
-                  maxLines: 2,
-                  style: AppTheme.pagefont,
-                  onTap: () async {
-                    showCalendar(context: context);
-                  },
-                  decoration: InputDecoration(
-                    labelText: '文章发布时间',
-                    fillColor: ColorTheme.leftBackColor,
-                    labelStyle: AppTheme.dateFont,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+                Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: TextField(
+                      autofocus: true,
+                      controller: _dateTimecontroller,
+                      style: AppTheme.pagefont,
+                      onTap: () async {
+                        showCalendar(context: context);
+                      },
+                      decoration: InputDecoration(
+                        labelText: '文章发布时间',
+                        isDense: true,
+                        fillColor: ColorTheme.leftBackColor,
+                        labelStyle: AppTheme.dateFont,
+                      ),
+                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

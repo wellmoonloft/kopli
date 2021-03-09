@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/pages/articlesBottom.dart';
+import 'package:kopli/pages/articlesTop.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/utils/providerData.dart';
@@ -27,8 +27,6 @@ class ArticlesPage extends StatefulWidget {
 class _ArticlesPageState extends State<ArticlesPage> {
   double isShow = 0.0;
   bool isList = false;
-  Icon isListIcon = Icon(FontAwesomeIcons.listUl);
-  String leftTitle = "文档";
   String sortsCode = "default";
   double articlesFrameHeight = 85;
 
@@ -68,50 +66,10 @@ class _ArticlesPageState extends State<ArticlesPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                  height: 30,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Opacity(
-                          opacity: isShow,
-                          child: Tooltip(
-                            message: isList ? "切换到文档视图" : "切换到大纲视图",
-                            child: IconButton(
-                              icon: isListIcon,
-                              iconSize: 14,
-                              color: ColorTheme.greylighter,
-                              onPressed: () {
-                                if (isList) {
-                                  setState(() {
-                                    isListIcon = Icon(FontAwesomeIcons.listUl);
-                                    isList = false;
-                                    leftTitle = "文档";
-                                    articlesFrameHeight = 85;
-                                  });
-                                } else {
-                                  setState(() {
-                                    isListIcon = Icon(FontAwesomeIcons.stream);
-                                    isList = true;
-                                    leftTitle = "大纲";
-                                    articlesFrameHeight = 55;
-                                  });
-                                }
-                              },
-                            ),
-                          )),
-                      Text(leftTitle, style: AppTheme.titleFont),
-                      Opacity(
-                        opacity: isShow,
-                        child: IconButton(
-                          icon: Icon(FontAwesomeIcons.search),
-                          iconSize: 14,
-                          color: ColorTheme.greylighter,
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  )),
+              ArticlesTop(
+                isShow: isShow,
+                isListAction: (_isList) => _isListAction(_isList),
+              ),
               Consumer<ProviderData>(builder: (context, providerdata, child) {
                 List<Article> tempList = providerdata.articleList;
                 return Container(
@@ -193,6 +151,20 @@ class _ArticlesPageState extends State<ArticlesPage> {
             ],
           ),
         ));
+  }
+
+  _isListAction(bool _isList) {
+    if (_isList) {
+      setState(() {
+        isList = false;
+        articlesFrameHeight = 85;
+      });
+    } else {
+      setState(() {
+        isList = true;
+        articlesFrameHeight = 55;
+      });
+    }
   }
 
   _newArticle() {

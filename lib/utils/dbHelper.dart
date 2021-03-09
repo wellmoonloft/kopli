@@ -79,11 +79,28 @@ class DBHelper {
 
   Future<int> deleteSorts(Sorts sorts) async {
     var dbClient = await db;
-    return await dbClient.delete(
-      'sorts',
-      where: 'id = ?',
-      whereArgs: [sorts.id],
-    );
+    var result = await dbClient.query('article',
+        columns: [
+          'id',
+          'createDate',
+          'editDate',
+          'title',
+          'fileName',
+          'filePath',
+          'sort',
+          'outline'
+        ],
+        where: 'sort=?',
+        whereArgs: [sorts.sortsCode]);
+    if (result.isEmpty) {
+      return await dbClient.delete(
+        'sorts',
+        where: 'id = ?',
+        whereArgs: [sorts.id],
+      );
+    } else {
+      return -1;
+    }
   }
 
   Future<List<Article>> getArticle() async {

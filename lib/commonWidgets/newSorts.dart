@@ -201,9 +201,33 @@ class _NewSortsState extends State<NewSorts> {
                                                                 context,
                                                                 listen: false);
 
-                                                        providerData.getSorts();
-                                                        Navigator.of(context)
-                                                            .pop();
+                                                        if (value == -1) {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return MyDialog(
+                                                                  isAlert: true,
+                                                                  title: "删除错误",
+                                                                  content:
+                                                                      "当前分类下仍有文章，请先删除文章",
+                                                                  onPress: () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                );
+                                                              });
+                                                        } else {
+                                                          providerData
+                                                              .getSorts();
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        }
                                                       });
                                                     },
                                                   );
