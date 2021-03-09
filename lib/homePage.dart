@@ -154,6 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+        //弹出键盘不错位
+        resizeToAvoidBottomInset: true,
         appBar: (width / height > 1)
             ? null
             : AppBar(

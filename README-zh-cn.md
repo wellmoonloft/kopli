@@ -34,13 +34,17 @@
 	<true/>
 ```
 
-5. 为了隐藏macOS APP上的标题栏，使用Xcode打开工程，在Runner>Runner>Resources>MainMenu.xib当中点击APP_NAME
-- Hide title = TRUE
-- Show Title bar = TRUE
-- Transparent Title Bar = TRUE
-- Full-Size Content View = TRUE
+5. 为了隐藏macOS APP上的标题栏，使用Xcode打开工程，在macos/Runner>Runner>Resources>MainMenu.xib当中点击APP_NAME
+  - Hide title = TRUE
+  - Show Title bar = TRUE
+  - Transparent Title Bar = TRUE
+  - Full-Size Content View = TRUE
 
-
+6.设置窗口最小值以及初始化窗口大小，macos/Runner/MainFlutterWindow.swift
+```
+  self.contentMinSize = NSSize(width: 800, height: 600)
+  self.setContentSize(NSSize(width: 1024, height: 768))
+```
 
 ## 参考
 - [Typora](https://typora.io/) 参考了Typora的设计风格。
