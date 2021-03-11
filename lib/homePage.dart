@@ -4,7 +4,9 @@ import 'package:kopli/commonWidgets/myDialog.dart';
 import 'package:kopli/commonWidgets/saveArticles.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/utils/dbHelper.dart';
+import 'package:kopli/utils/hotKey.dart';
 import 'package:kopli/utils/providerData.dart';
+import 'package:kopli/utils/textUndo.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +31,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String itemValue = "default";
   double offset = 0.0;
 
+  final _stack = TextChangeStack(maxSize: 20, init: "");
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           stringData = _controller.text;
           isEdit = true;
         });
+        _stack.add(_controller.text);
       }
     });
   }
@@ -163,32 +168,63 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
         body: RawKeyboardListener(
             focusNode: FocusNode(),
+            autofocus: true,
             onKey: (RawKeyEvent event) async {
-              if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) ||
-                  event.isKeyPressed(LogicalKeyboardKey.metaRight)) {
-                if (event.isKeyPressed(LogicalKeyboardKey.keyS)) {
-                  if (activeArticle.id != null) {
-                    _saveArticle(activeArticle);
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SaveArticles(
-                              dir: dir,
-                              stringData: stringData,
-                              saveArticle: (_article) =>
-                                  _saveArticle(_article));
-                        });
-                  }
+              HotKey hotKey = HotKey();
+              int mark = hotKey.save(event);
+
+              if (mark == 0) {
+                if (activeArticle.id != null) {
+                  _saveArticle(activeArticle);
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SaveArticles(
+                            dir: dir,
+                            stringData: stringData,
+                            saveArticle: (_article) => _saveArticle(_article));
+                      });
+                }
+              }
+              if (mark == 1) {
+                insertContent(stringData, "# ");
+              }
+              if (mark == 2) {
+                insertContent(stringData, "## ");
+              }
+              if (mark == 3) {
+                insertContent(stringData, "### ");
+              }
+              if (mark == 4) {
+                insertContent(stringData, "#### ");
+              }
+              if (mark == 5) {
+                insertContent(stringData, "#### ");
+              }
+              if (mark == 6) {
+                var undo = _stack.undo();
+                if (undo != null) {
+                  setState(() {
+                    stringData = undo;
+                    _controller.text = undo;
+                  });
+                }
+              }
+              if (mark == 7) {
+                var redo = _stack.redo();
+                if (redo != null) {
+                  setState(() {
+                    stringData = redo;
+                    _controller.text = redo;
+                  });
                 }
               }
             },
-            autofocus: true,
             child: Row(
               children: <Widget>[
                 (width / height > 1)
                     ? ArticlesPage(
-                        isEdit: isEdit,
                         activeArticle: activeArticle,
                         newArticle: () => _newArticle(),
                         loadArticle: (_article) => _loadArticle(_article))
@@ -211,5 +247,55 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       offset = _offset;
     });
+  }
+
+  insertContent(String stringData, String insert) {
+    int end = _controller.selection.baseOffset;
+    int start = _controller.selection.extentOffset;
+    TextSelection makeLast = TextSelection.fromPosition(TextPosition(
+        affinity: TextAffinity.downstream, offset: end + insert.length + 1));
+    if (start == end) {
+      if (end == stringData.length) {
+        setState(() {
+          _controller.text = stringData + "\n" + insert;
+          stringData = stringData + "\n" + insert;
+          _controller.selection = makeLast;
+        });
+      } else {
+        String frontSub = stringData.substring(0, end);
+        String endSub = stringData.substring(end, stringData.length);
+        setState(() {
+          stringData = frontSub + "\n" + insert + endSub;
+          _controller.text = frontSub + "\n" + insert + endSub;
+          _controller.selection = makeLast;
+        });
+      }
+    } else {
+      if (start > end) {
+        int temp = start;
+        start = end;
+        end = temp;
+      }
+      if (end == stringData.length) {
+        String frontSub = stringData.substring(0, start);
+        String endSub = stringData.substring(start, stringData.length);
+        endSub = "\n" + insert + endSub;
+
+        setState(() {
+          _controller.text = frontSub + endSub;
+          stringData = frontSub + endSub;
+          _controller.selection = makeLast;
+        });
+      } else {
+        String frontSub = stringData.substring(0, start);
+        String midSub = stringData.substring(start, end);
+        String endSub = stringData.substring(end, stringData.length);
+        setState(() {
+          _controller.text = frontSub + "\n" + insert + midSub + "\n" + endSub;
+          stringData = frontSub + "\n" + insert + midSub + "\n" + endSub;
+          _controller.selection = makeLast;
+        });
+      }
+    }
   }
 }

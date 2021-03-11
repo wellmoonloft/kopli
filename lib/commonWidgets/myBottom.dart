@@ -17,7 +17,7 @@ class MyBottom extends StatelessWidget {
       backColor = ColorTheme.appleBlue;
     }
     return Container(
-        height: 20,
+        height: 25,
         child: TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(backColor),

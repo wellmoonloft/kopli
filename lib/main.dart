@@ -21,10 +21,6 @@ class MyApp extends StatelessWidget {
         create: (context) => ProviderData(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Kopli',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
           home: MyHomePage(),
         ));
   }

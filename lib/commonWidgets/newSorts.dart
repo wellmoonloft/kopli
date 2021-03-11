@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kopli/commonWidgets/myDialog.dart';
+import 'package:kopli/commonWidgets/myTextField.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
 import 'package:kopli/model/dataModels.dart';
@@ -55,27 +56,18 @@ class _NewSortsState extends State<NewSorts> {
                                 width: 0.5))),
                     child: Text("添加分类",
                         style: AppTheme.titleFont, textAlign: TextAlign.start)),
-                TextField(
-                  autofocus: true,
-                  controller: _nameController,
-                  style: AppTheme.titleFont,
-                  decoration: InputDecoration(
-                      labelText: "标签名称",
-                      fillColor: ColorTheme.leftBackColor,
-                      labelStyle: AppTheme.dateFont),
-                ),
-                TextField(
-                  autofocus: true,
-                  controller: _codeController,
-                  style: AppTheme.titleFont,
-                  decoration: InputDecoration(
-                      labelText: "标签代码（最好为英文）",
-                      fillColor: ColorTheme.leftBackColor,
-                      labelStyle: AppTheme.dateFont),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                Container(
+                    padding: EdgeInsets.only(top: 16),
+                    child: MyTextField(
+                      controller: _nameController,
+                      laberText: "标签名称",
+                    )),
+                Container(
+                    padding: EdgeInsets.only(top: 16, bottom: 20),
+                    child: MyTextField(
+                      controller: _codeController,
+                      laberText: "标签代码（最好为英文）",
+                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

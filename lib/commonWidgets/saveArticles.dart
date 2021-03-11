@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:kopli/commonWidgets/myDialog.dart';
+import 'package:kopli/commonWidgets/myTextField.dart';
 import 'package:kopli/utils/dbHelper.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kopli/commonWidgets/newSorts.dart';
 import 'package:kopli/utils/appTheme.dart';
@@ -13,6 +13,7 @@ import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/commonWidgets/myBottom.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class SaveArticles extends StatefulWidget {
   final saveArticle;
@@ -55,7 +56,7 @@ class _SaveArticlesState extends State<SaveArticles> {
     return Dialog(
         child: Container(
             width: 400,
-            height: 350,
+            height: 420,
             padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
@@ -71,56 +72,36 @@ class _SaveArticlesState extends State<SaveArticles> {
                     child: Text("保存文章",
                         style: AppTheme.titleFont, textAlign: TextAlign.start)),
                 Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: TextField(
-                    autofocus: true,
-                    controller: _filecontroller,
-                    style: AppTheme.pagefont,
-                    inputFormatters: [LengthLimitingTextInputFormatter(28)],
-                    decoration: InputDecoration(
-                      labelText: '保存为',
-                      isDense: true,
-                      fillColor: ColorTheme.leftBackColor,
-                      labelStyle: AppTheme.dateFont,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: TextField(
-                    autofocus: true,
-                    controller: _outlinecontroller,
-                    maxLines: 2,
-                    style: AppTheme.pagefont,
-                    inputFormatters: [LengthLimitingTextInputFormatter(50)],
-                    decoration: InputDecoration(
-                      labelText: '摘要（为空则自动选取内容前50字）',
-                      isDense: true,
-                      fillColor: ColorTheme.leftBackColor,
-                      labelStyle: AppTheme.dateFont,
-                    ),
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: TextField(
-                      autofocus: true,
-                      controller: _dateTimecontroller,
-                      style: AppTheme.pagefont,
-                      onTap: () async {
-                        showCalendar(context: context);
-                      },
-                      decoration: InputDecoration(
-                        labelText: '文章发布时间',
-                        isDense: true,
-                        fillColor: ColorTheme.leftBackColor,
-                        labelStyle: AppTheme.dateFont,
-                      ),
+                    padding: EdgeInsets.only(top: 16),
+                    child: MyTextField(
+                      controller: _filecontroller,
+                      laberText: "保存为",
+                      lengthLimit: 28,
                     )),
+                Container(
+                    padding: EdgeInsets.only(top: 16),
+                    child: MyTextField(
+                      controller: _outlinecontroller,
+                      laberText: "摘要（为空则自动选取内容前50字）",
+                      maxLies: 2,
+                      lengthLimit: 50,
+                    )),
+                Container(
+                    padding: EdgeInsets.only(top: 16, bottom: 6),
+                    child: InkWell(
+                        onTap: () {
+                          showCalendar(context: context);
+                        },
+                        child: MyTextField(
+                          controller: _dateTimecontroller,
+                          laberText: "文章发布时间",
+                          onTap: () => {showCalendar(context: context)},
+                        ))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     MyBottom(
+                      type: "confirm",
                       onPress: () {
                         showDialog(
                             context: context,
@@ -166,16 +147,29 @@ class _SaveArticlesState extends State<SaveArticles> {
                     )
                   ],
                 ),
+                TextFieldTags(
+                    //initialTags: ['university', 'college', 'music', 'math'],
+                    tagsStyler: TagsStyler(
+                        tagTextStyle: AppTheme.bottomfontwhite,
+                        tagDecoration: BoxDecoration(
+                          color: ColorTheme.appleBlue,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        tagCancelIcon: Icon(Icons.cancel,
+                            size: 12.0, color: ColorTheme.white),
+                        tagPadding: const EdgeInsets.all(6.0)),
+                    textFieldStyler: TextFieldStyler(
+                        helperText: null,
+                        hintText: "请输入标签",
+                        hintStyle: AppTheme.dateFont),
+                    onTag: (tag) {},
+                    onDelete: (tag) {}),
                 SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // MyBottom(
-                    //   title: "新建标签",
-                    //   onPress: () {},
-                    // ),
                     Container(),
                     Row(
                       children: [

@@ -11,14 +11,9 @@ class ArticlesPage extends StatefulWidget {
   final loadArticle;
   final newArticle;
   final Article activeArticle;
-  final bool isEdit;
 
   const ArticlesPage(
-      {Key key,
-      this.loadArticle,
-      this.newArticle,
-      this.activeArticle,
-      this.isEdit})
+      {Key key, this.loadArticle, this.newArticle, this.activeArticle})
       : super(key: key);
   @override
   _ArticlesPageState createState() => _ArticlesPageState();

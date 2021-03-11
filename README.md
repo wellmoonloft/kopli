@@ -32,6 +32,17 @@ The demand I want is this:
 	<true/>
 ```
 
+5. In order to hide the title bar on the macOS APP, use Xcode to open the project and click APP_NAME in macos/Runner>Runner>Resources>MainMenu.xib
+  - Hide title = TRUE
+  - Show Title bar = TRUE
+  - Transparent Title Bar = TRUE
+  - Full-Size Content View = TRUE
+
+6. Set window size and initial window size, macos/Runner/MainFlutterWindow.swift
+```
+  self.contentMinSize = NSSize(width: 800, height: 600)
+  self.setContentSize(NSSize(width: 1024, height: 768))
+```
 
 ## Reference
 
