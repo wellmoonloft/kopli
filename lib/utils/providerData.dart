@@ -3,15 +3,36 @@ import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/utils/dbHelper.dart';
 
 class ProviderData extends ChangeNotifier {
-  // List<CurrencyData> currencyData = CurrencyData.currencyList;
-  // CurrencyData currency;
-
-  List<String> documentList = [];
   List<Article> articleList;
   List<Sorts> sortsList;
+  Article activeArticle;
+  String dir = "";
+  String activeData = "";
+  bool isEdit = false;
+  TextEditingController controller = TextEditingController();
 
-  setDocumentList(List<String> _documentList) {
-    documentList = _documentList;
+  setDir(String _dir) {
+    dir = _dir;
+    notifyListeners();
+  }
+
+  setIsEdit(bool _isEdit) {
+    isEdit = _isEdit;
+    notifyListeners();
+  }
+
+  setController(String _text) {
+    controller.text = _text;
+    notifyListeners();
+  }
+
+  setActveData(String _activeData) {
+    activeData = _activeData;
+    notifyListeners();
+  }
+
+  setActiveArticle(Article _activeArticle) {
+    activeArticle = _activeArticle;
     notifyListeners();
   }
 

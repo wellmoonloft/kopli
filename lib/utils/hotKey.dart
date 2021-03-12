@@ -1,50 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kopli/pages/saveArticles.dart';
+import 'package:kopli/utils/fileActions.dart';
+import 'package:kopli/utils/providerData.dart';
+import 'package:kopli/utils/textUndo.dart';
+import 'package:provider/provider.dart';
 
 class HotKey {
-  save(RawKeyEvent event) {
-    int back = -1;
-    //保存
+  void setHotKey(
+      BuildContext context, RawKeyEvent event, TextChangeStack _stack) {
+    var providerData = Provider.of<ProviderData>(context, listen: false);
+    FileActions _fileActions = FileActions();
+
+    //save
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.keyS)) {
-      back = 0;
+      if (providerData.activeArticle.id != null) {
+        _fileActions.saveArticle(context, providerData.activeArticle);
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Consumer<ProviderData>(
+                  builder: (context, providerdata, child) {
+                return SaveArticles(
+                    saveArticle: (_article) =>
+                        _fileActions.saveArticle(context, _article));
+              });
+            });
+      }
     }
-    //一级标题
+    //Level 1 heading
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.digit1)) {
-      back = 1;
-      print(back);
+      _fileActions.replaceContent(context, "# ", "");
     }
-    //二级标题
+    //Level 2 heading
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.digit2)) {
-      back = 2;
-      print(back);
+      _fileActions.replaceContent(context, "## ", "");
     }
-    //三级标题
+    //Level 3 heading
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.digit3)) {
-      back = 3;
-      print(back);
+      _fileActions.replaceContent(context, "### ", "");
     }
-    //四级标题
+    //Level 4 heading
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.digit4)) {
-      back = 4;
-      print(back);
+      _fileActions.replaceContent(context, "#### ", "");
     }
-    //五级标题
+    //Level 5 heading
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.digit5)) {
-      back = 5;
-      print(back);
+      _fileActions.replaceContent(context, "##### ", "");
     }
-    //撤回
+    //Bold
+    if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.keyB)) {
+      _fileActions.replaceContent(context, "**", "**");
+    }
+    //Italic
+    if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.keyI)) {
+      _fileActions.replaceContent(context, "*", "*");
+    }
+    //undo
     if (event.isMetaPressed && event.isKeyPressed(LogicalKeyboardKey.keyZ)) {
-      back = 6;
-      print(back);
+      print("object");
+      var undo = _stack.undo();
+      if (undo != null) {
+        providerData.setActveData(undo);
+        providerData.setController(undo);
+      }
     }
-    //回滚
+    //redo
     if (event.isMetaPressed &&
         event.isShiftPressed &&
         event.isKeyPressed(LogicalKeyboardKey.keyZ)) {
-      back = 7;
-      print(back);
+      print("object");
+      var redo = _stack.redo();
+      if (redo != null) {
+        providerData.setActveData(redo);
+        providerData.setController(redo);
+      }
     }
-    return back;
   }
 }

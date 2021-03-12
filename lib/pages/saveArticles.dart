@@ -5,7 +5,7 @@ import 'package:kopli/utils/dbHelper.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kopli/commonWidgets/newSorts.dart';
+import 'package:kopli/pages/newSorts.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/calendar_popup_view.dart';
 import 'package:kopli/utils/colorTheme.dart';
@@ -13,15 +13,12 @@ import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/commonWidgets/myBottom.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
-import 'package:textfield_tags/textfield_tags.dart';
+//import 'package:textfield_tags/textfield_tags.dart';
 
 class SaveArticles extends StatefulWidget {
   final saveArticle;
-  final String dir;
-  final String stringData;
 
-  const SaveArticles({Key key, this.saveArticle, this.dir, this.stringData})
-      : super(key: key);
+  const SaveArticles({Key key, this.saveArticle}) : super(key: key);
   @override
   _SaveArticlesState createState() => _SaveArticlesState();
 }
@@ -36,12 +33,10 @@ class _SaveArticlesState extends State<SaveArticles> {
   void initState() {
     super.initState();
 
-    setState(() {
-      _filecontroller.text = "未命名.md";
-      _outlinecontroller.text = "";
-      _dateTimecontroller.text =
-          DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    });
+    _filecontroller.text = "未命名.md";
+    _outlinecontroller.text = "";
+    _dateTimecontroller.text =
+        DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
   }
 
   @override
@@ -88,15 +83,11 @@ class _SaveArticlesState extends State<SaveArticles> {
                     )),
                 Container(
                     padding: EdgeInsets.only(top: 16, bottom: 6),
-                    child: InkWell(
-                        onTap: () {
-                          showCalendar(context: context);
-                        },
-                        child: MyTextField(
-                          controller: _dateTimecontroller,
-                          laberText: "文章发布时间",
-                          onTap: () => {showCalendar(context: context)},
-                        ))),
+                    child: MyTextField(
+                      controller: _dateTimecontroller,
+                      laberText: "文章发布时间",
+                      onTap: () => {showCalendar(context: context)},
+                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -147,23 +138,23 @@ class _SaveArticlesState extends State<SaveArticles> {
                     )
                   ],
                 ),
-                TextFieldTags(
-                    //initialTags: ['university', 'college', 'music', 'math'],
-                    tagsStyler: TagsStyler(
-                        tagTextStyle: AppTheme.bottomfontwhite,
-                        tagDecoration: BoxDecoration(
-                          color: ColorTheme.appleBlue,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        tagCancelIcon: Icon(Icons.cancel,
-                            size: 12.0, color: ColorTheme.white),
-                        tagPadding: const EdgeInsets.all(6.0)),
-                    textFieldStyler: TextFieldStyler(
-                        helperText: null,
-                        hintText: "请输入标签",
-                        hintStyle: AppTheme.dateFont),
-                    onTag: (tag) {},
-                    onDelete: (tag) {}),
+                // TextFieldTags(
+                //     initialTags: [],
+                //     tagsStyler: TagsStyler(
+                //         tagTextStyle: AppTheme.bottomfontwhite,
+                //         tagDecoration: BoxDecoration(
+                //           color: ColorTheme.appleBlue,
+                //           borderRadius: BorderRadius.circular(8.0),
+                //         ),
+                //         tagCancelIcon: Icon(Icons.cancel,
+                //             size: 12.0, color: ColorTheme.white),
+                //         tagPadding: const EdgeInsets.all(6.0)),
+                //     textFieldStyler: TextFieldStyler(
+                //         helperText: "null",
+                //         hintText: "请输入标签",
+                //         hintStyle: AppTheme.dateFont),
+                //     onTag: (tag) {},
+                //     onDelete: (tag) {}),
                 SizedBox(
                   height: 20,
                 ),
@@ -187,8 +178,11 @@ class _SaveArticlesState extends State<SaveArticles> {
                           title: "保存",
                           type: "confirm",
                           onPress: () async {
+                            var providerData = Provider.of<ProviderData>(
+                                context,
+                                listen: false);
                             File file = new File(
-                                p.join(widget.dir, _filecontroller.text));
+                                p.join(providerData.dir, _filecontroller.text));
                             await file.exists().then((value) async {
                               if (value) {
                                 showDialog(
@@ -208,16 +202,17 @@ class _SaveArticlesState extends State<SaveArticles> {
                                 article.fileName = _filecontroller.text;
                                 article.title = _filecontroller.text;
                                 article.sort = itemValue;
-                                article.filePath = widget.dir;
+                                article.filePath = providerData.dir;
                                 article.createDate = _dateTimecontroller.text;
                                 article.editDate = _dateTimecontroller.text;
                                 if (_outlinecontroller.text == "") {
-                                  if (widget.stringData.length > 50) {
-                                    article.outline =
-                                        widget.stringData.substring(0, 50);
+                                  if (providerData.activeData.length > 50) {
+                                    article.outline = providerData.activeData
+                                        .substring(0, 50);
                                   } else {
-                                    article.outline = widget.stringData
-                                        .substring(0, widget.stringData.length);
+                                    article.outline = providerData.activeData
+                                        .substring(
+                                            0, providerData.activeData.length);
                                   }
                                 } else {
                                   article.outline = _outlinecontroller.text;
@@ -227,29 +222,24 @@ class _SaveArticlesState extends State<SaveArticles> {
                                     .updateArticle(article)
                                     .then((value) {
                                   article.id = value;
-                                  File file = new File(
-                                      p.join(widget.dir, article.fileName));
+                                  File file = new File(p.join(
+                                      providerData.dir, article.fileName));
                                   file
-                                      .writeAsString(widget.stringData)
+                                      .writeAsString(providerData.activeData)
                                       .whenComplete(() => {
                                             widget.saveArticle(article),
                                             print("保存成功" +
                                                 p
-                                                    .join(widget.dir,
+                                                    .join(providerData.dir,
                                                         article.fileName)
                                                     .toString())
                                           });
                                 });
 
-                                var providerData = Provider.of<ProviderData>(
-                                    context,
-                                    listen: false);
                                 providerData.getArticle();
                                 Navigator.of(context).pop();
                               }
                             });
-
-                            //widget.saveArticle(article);
                           },
                         )
                       ],
@@ -272,10 +262,8 @@ class _SaveArticlesState extends State<SaveArticles> {
         initialStartDate: DateTime.now(),
         onApplyClick:
             (DateTime startData, DateTime endData, DateTime month, int mark) {
-          setState(() {
-            _dateTimecontroller.text =
-                DateFormat("yyyy-MM-dd HH:mm:ss").format(startData);
-          });
+          _dateTimecontroller.text =
+              DateFormat("yyyy-MM-dd HH:mm:ss").format(startData);
         },
         onCancelClick: () {},
       ),

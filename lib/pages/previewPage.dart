@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kopli/utils/appTheme.dart';
 import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/utils/providerData.dart';
+import 'package:provider/provider.dart';
 
 class PreviewPage extends StatefulWidget {
-  final String data;
   final double offset;
   final scrollOffset;
 
-  const PreviewPage({Key key, this.data, this.offset, this.scrollOffset})
+  const PreviewPage({Key key, this.offset, this.scrollOffset})
       : super(key: key);
   @override
   _PreviewPageState createState() => _PreviewPageState();
@@ -50,11 +51,13 @@ class _PreviewPageState extends State<PreviewPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(),
-              Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: Text("字数：" + widget.data.length.toString(),
-                    style: AppTheme.dateFont),
-              ),
+              Consumer<ProviderData>(builder: (context, providerdata, child) {
+                return Container(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Text("字数：" + providerdata.activeData.length.toString(),
+                      style: AppTheme.dateFont),
+                );
+              }),
             ],
           ),
         ),
@@ -67,11 +70,14 @@ class _PreviewPageState extends State<PreviewPage> {
                     color: ColorTheme.greydoublelighter, width: 0.5)),
           ),
           height: height - 30,
-          child: Markdown(
-            controller: _controller,
-            data: widget.data,
-            padding: EdgeInsets.only(left: 10, right: 10),
-          ),
+          child:
+              Consumer<ProviderData>(builder: (context, providerdata, child) {
+            return Markdown(
+              controller: _controller,
+              data: providerdata.activeData,
+              padding: EdgeInsets.only(left: 10, right: 10),
+            );
+          }),
         )
       ],
     );

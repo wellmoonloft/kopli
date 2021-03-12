@@ -40,7 +40,7 @@
   - Transparent Title Bar = TRUE
   - Full-Size Content View = TRUE
 
-6. 设置窗口最小值以及初始化窗口大小，macos/Runner/MainFlutterWindow.swift
+6.设置窗口最小值以及初始化窗口大小，macos/Runner/MainFlutterWindow.swift
 ```
   self.contentMinSize = NSSize(width: 800, height: 600)
   self.setContentSize(NSSize(width: 1024, height: 768))
