@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 
@@ -64,8 +66,13 @@ class _EditorPageState extends State<EditorPage> {
                         : Container(),
                   ),
                   Container(
+                      padding: EdgeInsets.only(left: 10),
                       child: providerdata.isEdit
-                          ? Text("-已编辑", style: AppTheme.dateFont)
+                          ? Icon(
+                              FontAwesomeIcons.minusCircle,
+                              color: ColorTheme.darkred,
+                              size: 12,
+                            )
                           : Container()),
                 ],
               );
@@ -82,22 +89,43 @@ class _EditorPageState extends State<EditorPage> {
           padding: EdgeInsets.only(left: 10, right: 10),
           child:
               Consumer<ProviderData>(builder: (context, providerdata, child) {
-            return TextField(
-              autofocus: true,
-              controller: providerdata.controller,
-              scrollController: _controllerScroll,
-              keyboardType: TextInputType.multiline,
-              style: TextStyle(
-                fontSize: 14,
-                color: ColorTheme.mainColor,
-              ),
-              maxLines: 500,
-              minLines: 1,
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 4),
-                border: InputBorder.none,
-              ),
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  //sdfsdcolor: ColorTheme.greenlighter,
+                  child: TextField(
+                    autofocus: true,
+                    controller: providerdata.controller,
+                    scrollController: _controllerScroll,
+                    keyboardType: TextInputType.multiline,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: ColorTheme.transparent,
+                    ),
+                    maxLines: 500,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 4),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Positioned(
+                    // left: 0,
+                    // top: 0,
+                    child: IgnorePointer(
+                        child: Container(
+                            // width: 200,
+                            // height: 200,
+                            //color: ColorTheme.redlighter,
+                            child: Markdown(
+                  // controller: _controllerScroll,
+                  data: providerdata.activeData,
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                )))),
+              ],
             );
           }),
         )

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kopli/pages/newSorts.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/pages/sorts/sortsPage.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 import 'package:kopli/model/dataModels.dart';
@@ -102,7 +102,7 @@ class _ArticlesBottomState extends State<ArticlesBottom> {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return NewSorts();
+                    return SortsPage();
                   });
             },
           ),

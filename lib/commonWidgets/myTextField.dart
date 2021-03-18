@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;

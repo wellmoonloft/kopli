@@ -1,19 +1,20 @@
 import 'package:kopli/utils/fileActions.dart';
 import 'package:flutter/material.dart';
 import 'package:kopli/model/dataModels.dart';
-import 'package:kopli/pages/articlesBottom.dart';
-import 'package:kopli/pages/articlesTop.dart';
+import 'package:kopli/pages/articles/articlesBottom.dart';
+import 'package:kopli/pages/articles/articlesTop.dart';
 import 'package:kopli/pages/saveArticles.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 
 class ArticlesPage extends StatefulWidget {
   final loadArticle;
   final newArticle;
+  final RawKeyEvent event;
 
-  const ArticlesPage({Key key, this.loadArticle, this.newArticle})
+  const ArticlesPage({Key key, this.loadArticle, this.newArticle, this.event})
       : super(key: key);
   @override
   _ArticlesPageState createState() => _ArticlesPageState();
@@ -92,19 +93,16 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                         },
                                         onLongPress: () {
                                           print("object");
+                                          widget.loadArticle(article);
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return Consumer<ProviderData>(
-                                                    builder: (context,
-                                                        providerdata, child) {
-                                                  return SaveArticles(
-                                                      saveArticle: (_article) =>
-                                                          _fileActions
-                                                              .saveArticle(
-                                                                  context,
-                                                                  _article));
-                                                });
+                                                return SaveArticles(
+                                                    saveArticle: (_article) =>
+                                                        _fileActions
+                                                            .saveArticle(
+                                                                context,
+                                                                _article));
                                               });
                                         },
                                         child: Column(

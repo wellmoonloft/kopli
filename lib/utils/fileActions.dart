@@ -17,12 +17,14 @@ class FileActions {
         directory.createSync();
         print('文档初始化成功，文件保存路径为 ${directory.path}');
       }
+      TextSelection makeLast = TextSelection.fromPosition(
+          TextPosition(affinity: TextAffinity.downstream, offset: 0));
       var providerData = Provider.of<ProviderData>(context, listen: false);
       providerData.setDir(directory.path);
       providerData.setActiveArticle(Article());
       providerData.setActveData("");
       providerData.setIsEdit(false);
-      providerData.setController("");
+      providerData.setController("", makeLast);
 
       providerData.getArticle();
       providerData.getSorts();
@@ -67,9 +69,11 @@ class FileActions {
       providerData.setDir(_article.filePath);
       providerData.setActiveArticle(_article);
       await file.readAsString().then((value) {
+        TextSelection makeLast = TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream, offset: value.length));
         providerData.setActveData(value);
         providerData.setIsEdit(false);
-        providerData.setController(value);
+        providerData.setController(value, makeLast);
       });
     }
   }
@@ -94,9 +98,13 @@ class FileActions {
               providerData.setDir(_article.filePath);
               providerData.setActiveArticle(_article);
               await file.readAsString().then((value) {
+                TextSelection makeLast = TextSelection.fromPosition(
+                    TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: value.length));
                 providerData.setActveData(value);
                 providerData.setIsEdit(false);
-                providerData.setController(value);
+                providerData.setController(value, makeLast);
               });
             }
             Navigator.of(context).pop();
@@ -104,58 +112,5 @@ class FileActions {
         );
       },
     );
-  }
-
-  replaceContent(BuildContext context, String insert1, String insert2) {
-    var providerData = Provider.of<ProviderData>(context, listen: false);
-    int end = providerData.controller.selection.baseOffset;
-    int start = providerData.controller.selection.extentOffset;
-    int offset = end + insert1.length + insert2.length + 1;
-
-    TextSelection makeLast = TextSelection.fromPosition(
-        TextPosition(affinity: TextAffinity.downstream, offset: offset));
-    if (start == end) {
-      if (end == providerData.activeData.length) {
-        providerData
-            .setController(providerData.activeData + "\n" + insert1 + insert2);
-        providerData.activeData =
-            providerData.activeData + "\n" + insert1 + insert2;
-        providerData.controller.selection = makeLast;
-      } else {
-        String frontSub = providerData.activeData.substring(0, end);
-        String endSub = providerData.activeData
-            .substring(end, providerData.activeData.length);
-        providerData
-            .setController(frontSub + "\n" + insert1 + insert2 + "\n" + endSub);
-        providerData.activeData =
-            frontSub + "\n" + insert1 + insert2 + "\n" + endSub;
-        providerData.controller.selection = makeLast;
-      }
-    } else {
-      if (start > end) {
-        int temp = start;
-        start = end;
-        end = temp;
-      }
-      if (end == providerData.activeData.length) {
-        String frontSub = providerData.activeData.substring(0, start);
-        String endSub = providerData.activeData
-            .substring(start, providerData.activeData.length);
-        endSub = "\n" + insert1 + endSub + insert2;
-        providerData.setController(frontSub + endSub);
-        providerData.activeData = frontSub + endSub;
-        providerData.controller.selection = makeLast;
-      } else {
-        String frontSub = providerData.activeData.substring(0, start);
-        String midSub = providerData.activeData.substring(start, end);
-        String endSub = providerData.activeData
-            .substring(end, providerData.activeData.length);
-        providerData.setController(
-            frontSub + "\n" + insert1 + midSub + insert2 + "\n" + endSub);
-        providerData.activeData =
-            frontSub + "\n" + insert1 + midSub + insert2 + "\n" + endSub;
-        providerData.controller.selection = makeLast;
-      }
-    }
   }
 }

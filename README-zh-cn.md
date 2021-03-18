@@ -3,7 +3,7 @@
 
  Markdown编辑器
 
- 🇨🇳简体中文 | 🇺🇸[English](https://github.com/wellmoonloft/vara)
+ 🇨🇳简体中文 | 🇺🇸[English](https://github.com/wellmoonloft/kopli)
 
 ## 简介
 
@@ -16,7 +16,10 @@
 2. 同样风格的APP可以在macOS和iOS上同步编写和查看
 3. 支持插入图片自动上传图床
 
-
+![](https://i.loli.net/2021/03/14/ouYKUxm7NOXEePa.jpg)
+![](https://i.loli.net/2021/03/14/nXGN3CcpzT2ODsd.jpg)
+![](https://i.loli.net/2021/03/14/fWrMJynYP2GNqbB.jpg)
+![](https://i.loli.net/2021/03/14/XpknhlRtErzbwxi.jpg)
 ------------------------------
 
 ## 快速开始

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 
 class AppTheme {
   AppTheme._();
@@ -17,6 +17,12 @@ class AppTheme {
   static const titleFont = TextStyle(
     //fontWeight: FontWeight.w300,
     fontSize: 13,
+    color: ColorTheme.mainColor,
+  );
+
+  static const mobileTitleFont = TextStyle(
+    //fontWeight: FontWeight.w500,
+    fontSize: 16,
     color: ColorTheme.mainColor,
   );
 
@@ -54,6 +60,18 @@ class AppTheme {
     fontWeight: FontWeight.w300,
     fontSize: 12,
     color: ColorTheme.appleBlue,
+  );
+
+  static const mobileBorderbottomfont = TextStyle(
+    fontWeight: FontWeight.w300,
+    fontSize: 14,
+    color: ColorTheme.appleBlue,
+  );
+
+  static const mobileTextbottomfont = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 16,
+    color: ColorTheme.mainColor,
   );
 
   static const bottomfontwhite = TextStyle(

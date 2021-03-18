@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 

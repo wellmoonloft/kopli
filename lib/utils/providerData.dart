@@ -21,8 +21,9 @@ class ProviderData extends ChangeNotifier {
     notifyListeners();
   }
 
-  setController(String _text) {
+  setController(String _text, TextSelection makeLast) {
     controller.text = _text;
+    controller.selection = makeLast;
     notifyListeners();
   }
 

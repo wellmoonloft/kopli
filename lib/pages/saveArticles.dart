@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:kopli/commonWidgets/myDialog.dart';
 import 'package:kopli/commonWidgets/myTextField.dart';
+import 'package:kopli/pages/sorts/sortsPage.dart';
 import 'package:kopli/utils/dbHelper.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kopli/pages/newSorts.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/calendar_popup_view.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/calendar/calendar_popup_view.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 import 'package:kopli/model/dataModels.dart';
 import 'package:kopli/commonWidgets/myBottom.dart';
 import 'package:kopli/utils/providerData.dart';
@@ -97,7 +97,7 @@ class _SaveArticlesState extends State<SaveArticles> {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return NewSorts();
+                              return SortsPage();
                             });
                       },
                       title: "新建分类",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kopli/utils/colorTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
+import 'package:kopli/utils/getPlatform.dart';
 
 class MyBottom extends StatelessWidget {
   final onPress;
@@ -17,7 +18,7 @@ class MyBottom extends StatelessWidget {
       backColor = ColorTheme.appleBlue;
     }
     return Container(
-        height: 25,
+        height: GetPlatform().getIsMobile() ? 25 : 34,
         child: TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(backColor),
@@ -26,7 +27,9 @@ class MyBottom extends StatelessWidget {
               onPress();
             },
             child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  left: GetPlatform().getIsMobile() ? 20 : 10,
+                  right: GetPlatform().getIsMobile() ? 20 : 10),
               child: Text(title,
                   style: TextStyle(
                     fontWeight: FontWeight.w300,

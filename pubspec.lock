@@ -128,6 +128,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.3"
+  keyboard_actions:
+    dependency: "direct main"
+    description:
+      name: keyboard_actions
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.4.0"
   markdown:
     dependency: transitive
     description:

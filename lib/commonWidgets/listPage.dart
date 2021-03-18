@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kopli/utils/appTheme.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
 
 class ListPage extends StatelessWidget {
   final bool isList;

@@ -15,6 +15,10 @@ The demand I want is this:
 2. Apps of the same style can be written and viewed simultaneously on macOS and iOS
 3. Support inserting pictures and uploading pictures automatically
 
+![](https://i.loli.net/2021/03/14/ouYKUxm7NOXEePa.jpg)
+![](https://i.loli.net/2021/03/14/nXGN3CcpzT2ODsd.jpg)
+![](https://i.loli.net/2021/03/14/fWrMJynYP2GNqbB.jpg)
+![](https://i.loli.net/2021/03/14/XpknhlRtErzbwxi.jpg)
 ------------------------------
 
 ## Quick start

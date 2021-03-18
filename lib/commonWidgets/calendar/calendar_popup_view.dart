@@ -2,10 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:kopli/commonWidgets/calendar/custom_calendar.dart';
 import 'package:kopli/commonWidgets/myBottom.dart';
-import 'package:kopli/utils/appTheme.dart';
-import 'package:kopli/utils/colorTheme.dart';
-import 'custom_calendar.dart';
+import 'package:kopli/commonWidgets/appTheme.dart';
+import 'package:kopli/commonWidgets/colorTheme.dart';
 
 class CalendarPopupView extends StatefulWidget {
   const CalendarPopupView(
