@@ -1,5 +1,5 @@
 # Kopli
-![](https://img.shields.io/badge/Toolkit-Flutter-blue.svg)  ![](https://img.shields.io/badge/Language-Dart-orange.svg)  ![](https://img.shields.io/apm/l/vim-mode)  ![](https://img.shields.io/badge/Process-Developing-blueviolet.svg)
+![](https://img.shields.io/badge/Toolkit-Flutter-blue.svg)  ![](https://img.shields.io/badge/Language-Dart-orange.svg)  ![](https://img.shields.io/badge/license-WTFPL-0xFFFFFFFF)  ![](https://img.shields.io/badge/Process-Developing-blueviolet.svg)
 
  Markdown编辑器
 
