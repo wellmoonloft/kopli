@@ -1,9 +1,12 @@
+import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kopli/commonWidgets/appTheme.dart';
 import 'package:kopli/commonWidgets/colorTheme.dart';
+import 'package:kopli/commonWidgets/markdown/my_extended_text_selection_controls.dart';
+import 'package:kopli/commonWidgets/markdown/my_special_text_span_builder.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +23,13 @@ class EditorPage extends StatefulWidget {
 
 class _EditorPageState extends State<EditorPage> {
   ScrollController _controllerScroll = ScrollController();
+
+  TextEditingController controller = TextEditingController();
+  final MyTextSelectionControls _myExtendedMaterialTextSelectionControls =
+      MyTextSelectionControls();
+  final MySpecialTextSpanBuilder _mySpecialTextSpanBuilder =
+      MySpecialTextSpanBuilder();
+
   @override
   void initState() {
     super.initState();
@@ -93,38 +103,69 @@ class _EditorPageState extends State<EditorPage> {
               fit: StackFit.expand,
               children: [
                 Container(
-                  //sdfsdcolor: ColorTheme.greenlighter,
-                  child: TextField(
-                    autofocus: true,
-                    controller: providerdata.controller,
-                    scrollController: _controllerScroll,
-                    keyboardType: TextInputType.multiline,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: ColorTheme.transparent,
-                    ),
-                    maxLines: 500,
-                    minLines: 1,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(vertical: 4),
-                      border: InputBorder.none,
-                    ),
+                    //sdfsdcolor: ColorTheme.greenlighter,
+                    child: ExtendedTextField(
+                  autofocus: true,
+                  controller: providerdata.controller,
+                  selectionControls: _myExtendedMaterialTextSelectionControls,
+                  specialTextSpanBuilder: _mySpecialTextSpanBuilder,
+                  scrollController: _controllerScroll,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(vertical: 4),
+                    border: InputBorder.none,
                   ),
-                ),
-                Positioned(
-                    // left: 0,
-                    // top: 0,
-                    child: IgnorePointer(
-                        child: Container(
-                            // width: 200,
-                            // height: 200,
-                            //color: ColorTheme.redlighter,
-                            child: Markdown(
-                  // controller: _controllerScroll,
-                  data: providerdata.activeData,
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                )))),
+                )
+
+                    // TextField(
+                    //   autofocus: true,
+                    //   controller: providerdata.controller,
+                    //   scrollController: _controllerScroll,
+                    //   keyboardType: TextInputType.multiline,
+                    //   style: TextStyle(
+                    //     fontSize: 14,
+                    //     color: ColorTheme.transparent,
+                    //   ),
+                    //   maxLines: 500,
+                    //   minLines: 1,
+                    //   decoration: InputDecoration(
+                    //     isDense: true,
+                    //     contentPadding: EdgeInsets.symmetric(vertical: 4),
+                    //     border: InputBorder.none,
+                    //   ),
+                    // ),
+                    ),
+                // Positioned(
+                //     // left: 0,
+                //     // top: 0,
+                //     child: Container(
+                //         color: ColorTheme.greenlighter,
+                //         child: ExtendedTextField(
+                //           selectionControls:
+                //               _myExtendedMaterialTextSelectionControls,
+                //           specialTextSpanBuilder: _mySpecialTextSpanBuilder,
+                //           controller: controller,
+                //           maxLines: null,
+                //           decoration: InputDecoration(
+                //             isDense: true,
+                //             contentPadding: EdgeInsets.symmetric(vertical: 4),
+                //             border: InputBorder.none,
+                //           ),
+                //         ))
+
+                //     //     child: IgnorePointer(
+                //     //         child: Container(
+                //     //             // width: 200,
+                //     //             // height: 200,
+                //     //             //color: ColorTheme.redlighter,
+                //     //             child: Markdown(
+                //     //   // controller: _controllerScroll,
+                //     //   data: providerdata.activeData,
+                //     //   padding: EdgeInsets.only(left: 10, right: 10),
+                //     // )))
+                //     ),
               ],
             );
           }),
