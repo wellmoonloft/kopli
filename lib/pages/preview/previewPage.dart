@@ -40,7 +40,7 @@ class _PreviewPageState extends State<PreviewPage> {
       children: [
         Container(
           height: 30,
-          width: (width / height > 1) ? (width - 270) / 2 : 0,
+          width: (width - 270) / 2,
           decoration: BoxDecoration(
             color: ColorTheme.white,
             border: Border(
@@ -62,7 +62,7 @@ class _PreviewPageState extends State<PreviewPage> {
           ),
         ),
         Container(
-          width: (width / height > 1) ? (width - 270) / 2 : 0,
+          width: (width - 270) / 2,
           decoration: BoxDecoration(
             color: ColorTheme.white,
             border: Border(

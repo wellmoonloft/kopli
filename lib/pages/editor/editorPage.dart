@@ -44,7 +44,7 @@ class _EditorPageState extends State<EditorPage> {
       children: <Widget>[
         Container(
             height: 30,
-            width: (width / height > 1) ? (width - 270) / 2 : 0,
+            width: (width - 270) / 2,
             decoration: BoxDecoration(
               color: ColorTheme.white,
               border: Border(
@@ -78,7 +78,7 @@ class _EditorPageState extends State<EditorPage> {
               );
             })),
         Container(
-          width: (width / height > 1) ? (width - 270) / 2 : 0,
+          width: (width - 270) / 2,
           height: height - 30,
           decoration: BoxDecoration(
             color: ColorTheme.white,
