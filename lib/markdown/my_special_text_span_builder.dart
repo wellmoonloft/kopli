@@ -1,8 +1,10 @@
 import 'package:extended_text_library/extended_text_library.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:kopli/commonWidgets/markdown/heading1.dart';
-import 'package:kopli/commonWidgets/markdown/image_text.dart';
+import 'package:kopli/markdown/bold_text.dart';
+import 'package:kopli/markdown/heading.dart';
+import 'package:kopli/markdown/image_text.dart';
+import 'package:kopli/markdown/italic_text.dart';
 
 import 'at_text.dart';
 import 'dollar_text.dart';
@@ -48,6 +50,24 @@ class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
     } else if (isStart(flag, DollarText.flag)) {
       return DollarText(textStyle, onTap,
           start: index - (DollarText.flag.length - 1));
+    } else if (isStart(flag, BoldText.flag)) {
+      return BoldText(textStyle, onTap,
+          start: index - (BoldText.flag.length - 1));
+    } else if (isStart(flag, ItalicText.flag)) {
+      return ItalicText(textStyle, onTap,
+          start: index - (ItalicText.flag.length - 1));
+    } else if (isStart(flag, Heading5Text.flag)) {
+      return Heading5Text(textStyle, onTap,
+          start: index - (Heading5Text.flag.length - 1));
+    } else if (isStart(flag, Heading4Text.flag)) {
+      return Heading4Text(textStyle, onTap,
+          start: index - (Heading4Text.flag.length - 1));
+    } else if (isStart(flag, Heading3Text.flag)) {
+      return Heading3Text(textStyle, onTap,
+          start: index - (Heading3Text.flag.length - 1));
+    } else if (isStart(flag, Heading2Text.flag)) {
+      return Heading2Text(textStyle, onTap,
+          start: index - (Heading2Text.flag.length - 1));
     } else if (isStart(flag, Heading1Text.flag)) {
       return Heading1Text(textStyle, onTap,
           start: index - (Heading1Text.flag.length - 1));

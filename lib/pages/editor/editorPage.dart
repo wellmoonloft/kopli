@@ -5,8 +5,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kopli/commonWidgets/appTheme.dart';
 import 'package:kopli/commonWidgets/colorTheme.dart';
-import 'package:kopli/commonWidgets/markdown/my_extended_text_selection_controls.dart';
-import 'package:kopli/commonWidgets/markdown/my_special_text_span_builder.dart';
+import 'package:kopli/markdown/my_extended_text_selection_controls.dart';
+import 'package:kopli/markdown/my_special_text_span_builder.dart';
 import 'package:kopli/utils/providerData.dart';
 import 'package:provider/provider.dart';
 
@@ -103,40 +103,41 @@ class _EditorPageState extends State<EditorPage> {
               fit: StackFit.expand,
               children: [
                 Container(
-                    //sdfsdcolor: ColorTheme.greenlighter,
-                    child: ExtendedTextField(
-                  autofocus: true,
-                  controller: providerdata.controller,
-                  selectionControls: _myExtendedMaterialTextSelectionControls,
-                  specialTextSpanBuilder: _mySpecialTextSpanBuilder,
-                  scrollController: _controllerScroll,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 4),
-                    border: InputBorder.none,
-                  ),
-                )
+                  //sdfsdcolor: ColorTheme.greenlighter,
+                  child:
+                      //     ExtendedTextField(
+                      //   autofocus: true,
+                      //   controller: providerdata.controller,
+                      //   selectionControls: _myExtendedMaterialTextSelectionControls,
+                      //   specialTextSpanBuilder: _mySpecialTextSpanBuilder,
+                      //   scrollController: _controllerScroll,
+                      //   keyboardType: TextInputType.multiline,
+                      //   maxLines: null,
+                      //   decoration: InputDecoration(
+                      //     isDense: true,
+                      //     contentPadding: EdgeInsets.symmetric(vertical: 4),
+                      //     border: InputBorder.none,
+                      //   ),
+                      // )
 
-                    // TextField(
-                    //   autofocus: true,
-                    //   controller: providerdata.controller,
-                    //   scrollController: _controllerScroll,
-                    //   keyboardType: TextInputType.multiline,
-                    //   style: TextStyle(
-                    //     fontSize: 14,
-                    //     color: ColorTheme.transparent,
-                    //   ),
-                    //   maxLines: 500,
-                    //   minLines: 1,
-                    //   decoration: InputDecoration(
-                    //     isDense: true,
-                    //     contentPadding: EdgeInsets.symmetric(vertical: 4),
-                    //     border: InputBorder.none,
-                    //   ),
-                    // ),
+                      TextField(
+                    autofocus: true,
+                    controller: providerdata.controller,
+                    scrollController: _controllerScroll,
+                    keyboardType: TextInputType.multiline,
+                    style: TextStyle(
+                      fontSize: 14,
+                      //color: ColorTheme.transparent,
                     ),
+                    maxLines: 500,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 4),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
                 // Positioned(
                 //     // left: 0,
                 //     // top: 0,
